@@ -1,0 +1,70 @@
+/* === PROJECT TABLE === */
+.project-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+}
+
+.project-table th,
+.project-table td {
+  padding: 12px 8px;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.project-table th {
+  background: #f9fafb;
+  color: #374151;
+  font-weight: 600;
+}
+
+.update-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.update-btn:hover {
+  background: #1e40af;
+}
+
+/* === Status Badges === */
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 500;
+  color: white;
+}
+
+.status-badge.ok {
+  background: #22c55e;
+}
+
+.status-badge.warn {
+  background: #f59e0b;
+}
+
+.status-badge.progress {
+  background: #3b82f6;
+}
+
+/* === DARK MODE TABLE === */
+.dashboard.dark .project-table th {
+  background: #1e293b;
+  color: #f1f5f9;
+}
+
+.dashboard.dark .project-table td {
+  border-bottom: 1px solid #334155;
+}
+
+.dashboard.dark .update-btn {
+  background: #475569;
+}
+
+.dashboard.dark .update-btn:hover {
+  background: #64748b;
+}
