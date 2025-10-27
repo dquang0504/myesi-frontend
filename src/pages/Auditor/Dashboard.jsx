@@ -1,5 +1,5 @@
 import React from 'react'
-export default function AdminDashboard(){
+export default function AuditorDashboard(){
   return (
     <div style={{padding:20}}>
       <h2>Auditor Dashboard</h2>

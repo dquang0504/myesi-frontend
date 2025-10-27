@@ -383,6 +383,108 @@ export const mockGetTopVulnerabilities = async (limit = 5) => {
 };
 
 /**
+ * Mock Risk Heatmap Data
+ */
+const MOCK_RISK_HEATMAP = {
+  // Project-based risk heatmap (for Admin Dashboard)
+  projects: [
+    { x: 'Week 1', y: 'Web Portal', value: 7.2 },
+    { x: 'Week 2', y: 'Web Portal', value: 6.8 },
+    { x: 'Week 3', y: 'Web Portal', value: 5.4 },
+    { x: 'Week 4', y: 'Web Portal', value: 4.9 },
+    
+    { x: 'Week 1', y: 'Mobile App', value: 8.5 },
+    { x: 'Week 2', y: 'Mobile App', value: 8.1 },
+    { x: 'Week 3', y: 'Mobile App', value: 7.3 },
+    { x: 'Week 4', y: 'Mobile App', value: 6.2 },
+    
+    { x: 'Week 1', y: 'API Gateway', value: 3.2 },
+    { x: 'Week 2', y: 'API Gateway', value: 3.5 },
+    { x: 'Week 3', y: 'API Gateway', value: 2.8 },
+    { x: 'Week 4', y: 'API Gateway', value: 2.1 },
+    
+    { x: 'Week 1', y: 'Auth Service', value: 6.1 },
+    { x: 'Week 2', y: 'Auth Service', value: 5.3 },
+    { x: 'Week 3', y: 'Auth Service', value: 4.7 },
+    { x: 'Week 4', y: 'Auth Service', value: 3.9 },
+    
+    { x: 'Week 1', y: 'Database Layer', value: 4.8 },
+    { x: 'Week 2', y: 'Database Layer', value: 4.2 },
+    { x: 'Week 3', y: 'Database Layer', value: 3.6 },
+    { x: 'Week 4', y: 'Database Layer', value: 3.1 },
+  ],
+  
+  // Component-based risk heatmap (for Developer Dashboard)
+  components: [
+    { x: 'Frontend', y: 'Authentication', value: 6.8 },
+    { x: 'Frontend', y: 'UI Components', value: 3.2 },
+    { x: 'Frontend', y: 'State Management', value: 4.5 },
+    { x: 'Frontend', y: 'API Client', value: 5.7 },
+    
+    { x: 'Backend', y: 'Authentication', value: 7.9 },
+    { x: 'Backend', y: 'UI Components', value: 2.1 },
+    { x: 'Backend', y: 'State Management', value: 3.8 },
+    { x: 'Backend', y: 'API Client', value: 6.4 },
+    
+    { x: 'Database', y: 'Authentication', value: 5.2 },
+    { x: 'Database', y: 'UI Components', value: 1.8 },
+    { x: 'Database', y: 'State Management', value: 4.1 },
+    { x: 'Database', y: 'API Client', value: 3.9 },
+    
+    { x: 'Infrastructure', y: 'Authentication', value: 8.3 },
+    { x: 'Infrastructure', y: 'UI Components', value: 2.9 },
+    { x: 'Infrastructure', y: 'State Management', value: 5.6 },
+    { x: 'Infrastructure', y: 'API Client', value: 7.1 },
+  ],
+  
+  // Risk category heatmap (for Analyst Dashboard)
+  categories: [
+    { x: 'Q1 2025', y: 'Code Vulnerabilities', value: 8.2 },
+    { x: 'Q2 2025', y: 'Code Vulnerabilities', value: 7.1 },
+    { x: 'Q3 2025', y: 'Code Vulnerabilities', value: 6.3 },
+    { x: 'Q4 2025', y: 'Code Vulnerabilities', value: 5.8 },
+    
+    { x: 'Q1 2025', y: 'Dependencies', value: 6.5 },
+    { x: 'Q2 2025', y: 'Dependencies', value: 5.9 },
+    { x: 'Q3 2025', y: 'Dependencies', value: 5.2 },
+    { x: 'Q4 2025', y: 'Dependencies', value: 4.7 },
+    
+    { x: 'Q1 2025', y: 'Configuration', value: 7.8 },
+    { x: 'Q2 2025', y: 'Configuration', value: 6.4 },
+    { x: 'Q3 2025', y: 'Configuration', value: 5.1 },
+    { x: 'Q4 2025', y: 'Configuration', value: 4.2 },
+    
+    { x: 'Q1 2025', y: 'Infrastructure', value: 5.3 },
+    { x: 'Q2 2025', y: 'Infrastructure', value: 4.8 },
+    { x: 'Q3 2025', y: 'Infrastructure', value: 4.1 },
+    { x: 'Q4 2025', y: 'Infrastructure', value: 3.5 },
+    
+    { x: 'Q1 2025', y: 'Compliance', value: 4.1 },
+    { x: 'Q2 2025', y: 'Compliance', value: 3.6 },
+    { x: 'Q3 2025', y: 'Compliance', value: 3.2 },
+    { x: 'Q4 2025', y: 'Compliance', value: 2.8 },
+  ],
+};
+
+/**
+ * Get Risk Heatmap Data
+ * @param {string} type - Type of heatmap: 'projects', 'components', or 'categories'
+ */
+export const mockGetRiskHeatmap = async (type = 'projects') => {
+  await delay(600);
+  
+  const heatmapData = MOCK_RISK_HEATMAP[type] || MOCK_RISK_HEATMAP.projects;
+  
+  return {
+    data: {
+      heatmap: heatmapData,
+      type: type,
+      lastUpdated: new Date().toISOString(),
+    },
+  };
+};
+
+/**
  * Get Component Inventory
  */
 export const mockGetComponentInventory = async () => {

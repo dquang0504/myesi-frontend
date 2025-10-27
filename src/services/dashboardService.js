@@ -14,6 +14,7 @@ import {
   mockGetTopVulnerabilities,
   mockGetComponentInventory,
   mockGetAnalytics,
+  mockGetRiskHeatmap,
 } from './mockDashboardService';
 
 /**
@@ -166,6 +167,20 @@ export const dashboardService = {
       return mockGetAnalytics();
     }
     const response = await axiosInstance.get('/analytics/all');
+    return response;
+  },
+
+  /**
+   * Get risk heatmap data
+   * @param {string} type - Type of heatmap: 'projects', 'components', or 'categories'
+   */
+  getRiskHeatmap: async (type = 'projects') => {
+    if (useMockDashboard()) {
+      return mockGetRiskHeatmap(type);
+    }
+    const response = await axiosInstance.get('/risk/heatmap', {
+      params: { type },
+    });
     return response;
   },
 };

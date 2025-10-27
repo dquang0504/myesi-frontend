@@ -7,6 +7,7 @@ import {
   PieChartComponent,
   AreaChartComponent,
 } from '../../components/ChartComponent';
+import HeatmapComponent from '../../components/HeatmapComponent';
 import {
   useDashboardStats,
   useRecentActivities,
@@ -14,6 +15,7 @@ import {
   useSBOMAnalytics,
   useRiskScores,
   useTopVulnerabilities,
+  useRiskHeatmap,
 } from '../../hooks/useDashboard';
 import './Dashboard.css';
 import '../Admin/AnalyticsDashboard.css';
@@ -29,6 +31,7 @@ export default function DeveloperDashboard() {
   const { data: sbomData, isLoading: sbomLoading } = useSBOMAnalytics();
   const { data: riskData, isLoading: riskLoading } = useRiskScores();
   const { data: topVulnData, isLoading: topVulnLoading } = useTopVulnerabilities(10);
+  const { data: heatmapData, isLoading: heatmapLoading } = useRiskHeatmap('components');
 
   const stats = statsData?.data || {};
   const activities = activitiesData?.data?.activities || [];
@@ -36,6 +39,7 @@ export default function DeveloperDashboard() {
   const sbomAnalytics = sbomData?.data || {};
   const riskScores = riskData?.data || {};
   const topVulnerabilities = topVulnData?.data?.vulnerabilities || [];
+  const riskHeatmap = heatmapData?.data?.heatmap || [];
 
   const formatTimeAgo = (timestamp) => {
     const now = new Date();
@@ -223,6 +227,29 @@ export default function DeveloperDashboard() {
                   ]}
                   xKey="name"
                   height={280}
+                />
+              )}
+            </div>
+
+            {/* Component Risk Heatmap - Full Width */}
+            <div className="analytics-card full-width">
+              <div className="card-header">
+                <h3>Component Risk Heatmap</h3>
+                <span className="badge badge-info">Risk by Architecture Layer</span>
+              </div>
+              {heatmapLoading ? (
+                <div className="chart-loading">
+                  <div className="spinner-large"></div>
+                </div>
+              ) : (
+                <HeatmapComponent
+                  data={riskHeatmap}
+                  xKey="x"
+                  yKey="y"
+                  valueKey="value"
+                  height={350}
+                  showValues={true}
+                  tooltip={true}
                 />
               )}
             </div>

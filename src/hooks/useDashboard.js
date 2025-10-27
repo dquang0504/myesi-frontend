@@ -135,3 +135,15 @@ export const useAnalytics = () => {
   });
 };
 
+/**
+ * Hook to fetch risk heatmap data
+ * @param {string} type - Type of heatmap: 'projects', 'components', or 'categories'
+ */
+export const useRiskHeatmap = (type = 'projects') => {
+  return useQuery({
+    queryKey: ['riskHeatmap', type],
+    queryFn: () => dashboardService.getRiskHeatmap(type),
+    staleTime: 180000, // 3 minutes
+    refetchInterval: 300000, // Refetch every 5 minutes
+  });
+};

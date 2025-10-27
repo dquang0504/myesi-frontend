@@ -9,6 +9,21 @@ export default function AdminSidebar() {
   const { user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Get role from user or infer from path
+  const userRole = user?.role?.toLowerCase() || 
+    (location.pathname.startsWith('/admin') ? 'admin' :
+    location.pathname.startsWith('/developer') ? 'developer' :
+    location.pathname.startsWith('/analyst') ? 'analyst' :
+    location.pathname.startsWith('/auditor') ? 'auditor' : 'admin');
+
+  const getRoleBasePath = () => {
+    return `/${userRole}`;
+  };
+
+  const getRoleTitle = () => {
+    return userRole.charAt(0).toUpperCase() + userRole.slice(1) + ' Portal';
+  };
+
   const handleLogout = () => {
     logout();
     navigate('/login');
@@ -51,7 +66,7 @@ export default function AdminSidebar() {
       <aside className={`admin-sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
         {/* Header */}
         <div className="sidebar-header">
-          <Link to="/admin/dashboard" className="sidebar-logo">
+          <Link to={`${getRoleBasePath()}/dashboard`} className="sidebar-logo">
             <div className="logo-icon">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
@@ -64,7 +79,7 @@ export default function AdminSidebar() {
             </div>
             <div className="logo-text">
               <h2>MyESI</h2>
-              <p>Admin Portal</p>
+              <p>{getRoleTitle()}</p>
             </div>
           </Link>
         </div>
@@ -76,8 +91,8 @@ export default function AdminSidebar() {
               {user?.name?.charAt(0).toUpperCase() || 'A'}
             </div>
             <div className="user-details">
-              <h3>{user?.name || 'Admin User'}</h3>
-              <p>{user?.role || 'Administrator'}</p>
+              <h3>{user?.name || 'User'}</h3>
+              <p>{userRole.charAt(0).toUpperCase() + userRole.slice(1)}</p>
             </div>
           </div>
         </div>
@@ -89,8 +104,8 @@ export default function AdminSidebar() {
             <ul className="nav-menu">
               <li className="nav-item">
                 <Link
-                  to="/admin/dashboard"
-                  className={`nav-link ${isActive('/admin/dashboard') ? 'active' : ''}`}
+                  to={`${getRoleBasePath()}/dashboard`}
+                  className={`nav-link ${isActive(`${getRoleBasePath()}/dashboard`) ? 'active' : ''}`}
                   onClick={closeMobileMenu}
                 >
                   <svg
@@ -110,10 +125,40 @@ export default function AdminSidebar() {
                 </Link>
               </li>
 
+              {userRole === 'admin' && (
+                <li className="nav-item">
+                  <Link
+                    to="/admin/users"
+                    className={`nav-link ${isActive('/admin/users') ? 'active' : ''}`}
+                    onClick={closeMobileMenu}
+                  >
+                    <svg
+                      className="nav-icon"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                      />
+                    </svg>
+                    <span className="nav-text">User Management</span>
+                  </Link>
+                </li>
+              )}
+            </ul>
+          </div>
+
+          <div className="nav-section">
+            <h4 className="nav-section-title">Billing</h4>
+            <ul className="nav-menu">
               <li className="nav-item">
                 <Link
-                  to="/admin/users"
-                  className={`nav-link ${isActive('/admin/users') ? 'active' : ''}`}
+                  to={`${getRoleBasePath()}/subscription`}
+                  className={`nav-link ${isActive(`${getRoleBasePath()}/subscription`) ? 'active' : ''}`}
                   onClick={closeMobileMenu}
                 >
                   <svg
@@ -126,10 +171,33 @@ export default function AdminSidebar() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                      d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
                     />
                   </svg>
-                  <span className="nav-text">User Management</span>
+                  <span className="nav-text">Subscription</span>
+                </Link>
+              </li>
+
+              <li className="nav-item">
+                <Link
+                  to={`${getRoleBasePath()}/billing`}
+                  className={`nav-link ${isActive(`${getRoleBasePath()}/billing`) ? 'active' : ''}`}
+                  onClick={closeMobileMenu}
+                >
+                  <svg
+                    className="nav-icon"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+                    />
+                  </svg>
+                  <span className="nav-text">Billing</span>
                 </Link>
               </li>
             </ul>
@@ -140,8 +208,8 @@ export default function AdminSidebar() {
             <ul className="nav-menu">
               <li className="nav-item">
                 <Link
-                  to="/admin/reports"
-                  className={`nav-link ${isActive('/admin/reports') ? 'active' : ''}`}
+                  to={`${getRoleBasePath()}/reports`}
+                  className={`nav-link ${isActive(`${getRoleBasePath()}/reports`) ? 'active' : ''}`}
                   onClick={closeMobileMenu}
                 >
                   <svg
@@ -158,14 +226,13 @@ export default function AdminSidebar() {
                     />
                   </svg>
                   <span className="nav-text">Reports</span>
-                  <span className="nav-badge">Soon</span>
                 </Link>
               </li>
 
               <li className="nav-item">
                 <Link
-                  to="/admin/settings"
-                  className={`nav-link ${isActive('/admin/settings') ? 'active' : ''}`}
+                  to={`${getRoleBasePath()}/settings`}
+                  className={`nav-link ${isActive(`${getRoleBasePath()}/settings`) ? 'active' : ''}`}
                   onClick={closeMobileMenu}
                 >
                   <svg
