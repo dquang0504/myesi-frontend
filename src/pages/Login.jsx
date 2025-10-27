@@ -1,11 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useAuth } from "../context/AuthContext";
 import "./Login.css";
-import axios from "axios";
-import { apiURL } from "../App";
 
 // Validation schema
 const loginSchema = Yup.object({
@@ -40,22 +38,21 @@ const Login = () => {
 
   const handleSubmit = async (values, { setSubmitting, setFieldError }) => {
     try {
-      const result = await login(values); // <-- dùng context login
-
-      console.log(result);
+      const result = await login(values);
 
       if (result.success) {
-        const redirectPath = redirectPaths[result.user.role] || "/";
+        // Convert role to lowercase for case-insensitive matching
+        const userRole = result.user.role.toLowerCase();
+        const redirectPath = redirectPaths[userRole] || "/";
         navigate(redirectPath, { replace: true });
       } else {
         setFieldError("password", result.error || "Invalid email or password");
       }
     } catch (error) {
-      console.error(error);
+      console.error("Login error:", error);
       setFieldError("password", "An unexpected error occurred");
     } finally {
       setSubmitting(false);
-      console.log("what?")
     }
   };
 

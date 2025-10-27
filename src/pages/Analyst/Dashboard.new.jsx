@@ -74,24 +74,28 @@ export default function AnalystDashboard() {
       value: riskScores.overallRisk || 6.5,
       subValue: '/10',
       change: -5,
+      icon: '🎯',
       color: 'warning',
     },
     {
       title: 'High Risk Items',
       value: stats.criticalVulnerabilities || 0,
       change: -12,
+      icon: '⚠️',
       color: 'danger',
     },
     {
       title: 'Compliance Score',
       value: `${compliance.overallScore || 0}%`,
       change: +8,
+      icon: '✅',
       color: 'success',
     },
     {
       title: 'Analyzed Projects',
       value: stats.totalSBOMs || 0,
       change: +15,
+      icon: '📊',
       color: 'primary',
     },
   ];
@@ -138,13 +142,19 @@ export default function AnalystDashboard() {
               value={timeRange} 
               onChange={(e) => setTimeRange(e.target.value)}
               className="time-range-select"
-              style={{ padding: '0.5rem 1rem', borderRadius: '6px', border: '1px solid #ddd' }}
+              style={{ marginRight: '1rem', padding: '0.5rem', borderRadius: '6px', border: '1px solid #ddd' }}
             >
               <option value="7">Last 7 Days</option>
               <option value="14">Last 14 Days</option>
               <option value="30">Last 30 Days</option>
               <option value="90">Last 90 Days</option>
             </select>
+            <button className="refresh-btn" onClick={() => window.location.reload()}>
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Refresh
+            </button>
           </div>
         </div>
 
@@ -159,6 +169,7 @@ export default function AnalystDashboard() {
           ) : (
             analystStats.map((stat, index) => (
               <div key={index} className={`stat-card stat-${stat.color}`}>
+                <div className="stat-icon">{stat.icon}</div>
                 <div className="stat-content">
                   <h3>{stat.title}</h3>
                   <div className="stat-value">
@@ -176,7 +187,7 @@ export default function AnalystDashboard() {
 
         {/* === RISK ANALYTICS === */}
         <div className="analytics-section">
-          <h2 className="section-title">Risk & Trend Analysis</h2>
+          <h2 className="section-title">📈 Risk & Trend Analysis</h2>
           
           <div className="analytics-grid">
             {/* Risk Trend Over Time */}
@@ -277,7 +288,7 @@ export default function AnalystDashboard() {
 
         {/* === RISK ASSESSMENT === */}
         <div className="reports-section">
-          <h2 className="section-title">Risk Assessment</h2>
+          <h2 className="section-title">🎯 Risk Assessment</h2>
           
           <div className="reports-grid">
             {/* Risk Categories */}
@@ -420,7 +431,7 @@ export default function AnalystDashboard() {
 
         {/* === ANALYTICS TOOLS === */}
         <div className="interactive-section">
-          <h2 className="section-title">Analysis Tools</h2>
+          <h2 className="section-title">🔧 Analysis Tools</h2>
           
           <div className="tools-grid">
             {/* Risk Assessment Report */}
