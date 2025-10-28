@@ -6,8 +6,13 @@ import AdminDashboard from './pages/Admin/Dashboard';
 import UserManagement from './pages/Admin/UserManagement';
 import AdminReports from './pages/Admin/Reports';
 import DeveloperDashboard from './pages/Developer/Dashboard';
+import DeveloperReports from './pages/Developer/Reports';
 import AnalystDashboard from './pages/Analyst/Dashboard';
+import AnalystReports from './pages/Analyst/Reports';
 import AuditorDashboard from './pages/Auditor/Dashboard';
+import AuditReports from './pages/Auditor/AuditReports';
+import AuditorCompliance from './pages/Auditor/Compliance';
+import SystemLogs from './pages/Auditor/SystemLogs';
 import SubscriptionPage from './pages/SubscriptionPage';
 import BillingStatus from './pages/BillingStatus';
 import './App.css';
@@ -75,6 +80,14 @@ export default function App() {
           }
         />
         <Route
+          path="/developer/reports"
+          element={
+            <PrivateRoute requiredRole="developer">
+              <DeveloperReports />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="/developer/subscription"
           element={
             <PrivateRoute requiredRole="developer">
@@ -101,6 +114,14 @@ export default function App() {
           }
         />
         <Route
+          path="/analyst/reports"
+          element={
+            <PrivateRoute requiredRole="analyst">
+              <AnalystReports />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="/analyst/subscription"
           element={
             <PrivateRoute requiredRole="analyst">
@@ -123,6 +144,30 @@ export default function App() {
           element={
             <PrivateRoute requiredRole="auditor">
               <AuditorDashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/auditor/reports"
+          element={
+            <PrivateRoute requiredRole="auditor">
+              <AuditReports />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/auditor/compliance"
+          element={
+            <PrivateRoute requiredRole="auditor">
+              <AuditorCompliance />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/auditor/logs"
+          element={
+            <PrivateRoute requiredRole="auditor">
+              <SystemLogs />
             </PrivateRoute>
           }
         />

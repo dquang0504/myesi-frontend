@@ -6,18 +6,24 @@
 
 .admin-main-content {
   flex: 1;
-  margin-left: 260px;
+  margin-left: 280px;
   padding: 2rem;
   min-height: 100vh;
-  width: calc(100% - 260px);
+  width: calc(100% - 280px);
   overflow-x: hidden;
 }
 
 /* Mobile Responsive */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .admin-main-content {
     margin-left: 0;
     width: 100%;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-main-content {
     padding: 1rem;
   }
 }
