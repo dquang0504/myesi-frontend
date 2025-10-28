@@ -67,3 +67,83 @@ export const useVulnerabilityTrend = (days = 7) => {
     staleTime: 120000, // 2 minutes
   });
 };
+
+/**
+ * Hook to fetch SBOM analytics
+ */
+export const useSBOMAnalytics = () => {
+  return useQuery({
+    queryKey: ['sbomAnalytics'],
+    queryFn: () => dashboardService.getSBOMAnalytics(),
+    staleTime: 120000,
+  });
+};
+
+/**
+ * Hook to fetch risk scores
+ */
+export const useRiskScores = () => {
+  return useQuery({
+    queryKey: ['riskScores'],
+    queryFn: () => dashboardService.getRiskScores(),
+    staleTime: 120000,
+  });
+};
+
+/**
+ * Hook to fetch compliance data
+ */
+export const useCompliance = () => {
+  return useQuery({
+    queryKey: ['compliance'],
+    queryFn: () => dashboardService.getCompliance(),
+    staleTime: 120000,
+  });
+};
+
+/**
+ * Hook to fetch top vulnerabilities
+ */
+export const useTopVulnerabilities = (limit = 5) => {
+  return useQuery({
+    queryKey: ['topVulnerabilities', limit],
+    queryFn: () => dashboardService.getTopVulnerabilities(limit),
+    staleTime: 60000,
+  });
+};
+
+/**
+ * Hook to fetch component inventory
+ */
+export const useComponentInventory = () => {
+  return useQuery({
+    queryKey: ['componentInventory'],
+    queryFn: () => dashboardService.getComponentInventory(),
+    staleTime: 120000,
+  });
+};
+
+/**
+ * Hook to fetch all analytics data
+ */
+export const useAnalytics = () => {
+  return useQuery({
+    queryKey: ['analytics'],
+    queryFn: () => dashboardService.getAllAnalytics(),
+    staleTime: 120000,
+    refetchInterval: 300000, // Refetch every 5 minutes
+  });
+};
+
+/**
+ * Hook to fetch risk heatmap data
+ * @param {string} type - Type of heatmap: 'projects', 'components', or 'categories'
+ */
+export const useRiskHeatmap = (type = 'projects') => {
+  return useQuery({
+    queryKey: ['riskHeatmap', type],
+    queryFn: () => dashboardService.getRiskHeatmap(type),
+    staleTime: 180000, // 3 minutes
+    refetchInterval: 300000, // Refetch every 5 minutes
+  });
+};

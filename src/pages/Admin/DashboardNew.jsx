@@ -7,20 +7,22 @@ import {
   PieChartComponent,
   AreaChartComponent,
 } from '../../components/ChartComponent';
-import HeatmapComponent from '../../components/HeatmapComponent';
 import {
   useDashboardStats,
   useRecentActivities,
   useVulnerabilityTrend,
   useSBOMAnalytics,
   useRiskScores,
-  useRiskHeatmap,
+  useCompliance,
+  useTopVulnerabilities,
+  useComponentInventory,
 } from '../../hooks/useDashboard';
 import './Dashboard.css';
 import './AnalyticsDashboard.css';
 
 export default function AdminDashboard() {
   const [uploadFile, setUploadFile] = useState(null);
+  const [filterSeverity, setFilterSeverity] = useState('all');
   
   // Fetch dashboard data
   const { data: statsData, isLoading: statsLoading } = useDashboardStats();
@@ -28,14 +30,18 @@ export default function AdminDashboard() {
   const { data: trendData, isLoading: trendLoading } = useVulnerabilityTrend(7);
   const { data: sbomData, isLoading: sbomLoading } = useSBOMAnalytics();
   const { data: riskData, isLoading: riskLoading } = useRiskScores();
-  const { data: heatmapData, isLoading: heatmapLoading } = useRiskHeatmap('projects');
+  const { data: complianceData, isLoading: complianceLoading } = useCompliance();
+  const { data: topVulnData, isLoading: topVulnLoading } = useTopVulnerabilities(5);
+  const { data: componentData, isLoading: componentLoading } = useComponentInventory();
 
   const stats = statsData?.data || {};
   const activities = activitiesData?.data?.activities || [];
   const vulnerabilityTrend = trendData?.data?.trend || [];
   const sbomAnalytics = sbomData?.data || {};
   const riskScores = riskData?.data || {};
-  const riskHeatmap = heatmapData?.data?.heatmap || [];
+  const compliance = complianceData?.data || {};
+  const topVulnerabilities = topVulnData?.data?.vulnerabilities || [];
+  const components = componentData?.data || {};
 
   const formatTimeAgo = (timestamp) => {
     const now = new Date();
@@ -64,6 +70,10 @@ export default function AdminDashboard() {
     }
   };
 
+  const filteredVulnerabilities = filterSeverity === 'all' 
+    ? topVulnerabilities 
+    : topVulnerabilities.filter(v => v.severity === filterSeverity);
+
   if (statsLoading) {
     return (
       <AdminLayout>
@@ -83,7 +93,7 @@ export default function AdminDashboard() {
         {/* Header */}
         <div className="dashboard-header">
           <div>
-            <h1>Admin Dashboard</h1>
+            <h1>Analytics Dashboard</h1>
             <p>Comprehensive SBOM, Risk & Compliance Analytics</p>
           </div>
         </div>
@@ -241,6 +251,30 @@ export default function AdminDashboard() {
               )}
             </div>
 
+            {/* Compliance Score */}
+            <div className="analytics-card">
+              <div className="card-header">
+                <h3>Compliance Trend</h3>
+                <span className="compliance-score">
+                  {compliance.overallScore || 0}%
+                </span>
+              </div>
+              {complianceLoading ? (
+                <div className="chart-loading">
+                  <div className="spinner-large"></div>
+                </div>
+              ) : (
+                <AreaChartComponent
+                  data={compliance.complianceTrend || []}
+                  areas={[
+                    { key: 'score', name: 'Compliance Score', color: '#10b981' },
+                  ]}
+                  xKey="date"
+                  height={280}
+                />
+              )}
+            </div>
+
             {/* Top Languages */}
             <div className="analytics-card">
               <div className="card-header">
@@ -262,27 +296,165 @@ export default function AdminDashboard() {
                 />
               )}
             </div>
+          </div>
+        </div>
 
-            {/* Risk Heatmap - Full Width */}
-            <div className="analytics-card full-width">
+        {/* === REPORTS SECTION === */}
+        <div className="reports-section">
+          <h2 className="section-title">📑 Reports & Analysis</h2>
+          
+          <div className="reports-grid">
+            {/* Top Vulnerabilities */}
+            <div className="report-card full-width">
               <div className="card-header">
-                <h3>Project Risk Heatmap</h3>
-                <span className="badge badge-info">Weekly Risk Scores</span>
+                <h3>Top Vulnerabilities</h3>
+                <div className="filter-group">
+                  <select 
+                    value={filterSeverity} 
+                    onChange={(e) => setFilterSeverity(e.target.value)}
+                    className="severity-filter"
+                  >
+                    <option value="all">All Severities</option>
+                    <option value="critical">Critical</option>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                  </select>
+                </div>
               </div>
-              {heatmapLoading ? (
-                <div className="chart-loading">
+              {topVulnLoading ? (
+                <div className="table-loading">
                   <div className="spinner-large"></div>
                 </div>
               ) : (
-                <HeatmapComponent
-                  data={riskHeatmap}
-                  xKey="x"
-                  yKey="y"
-                  valueKey="value"
-                  height={350}
-                  showValues={true}
-                  tooltip={true}
-                />
+                <div className="table-container">
+                  <table className="vulnerability-table">
+                    <thead>
+                      <tr>
+                        <th>CVE ID</th>
+                        <th>Title</th>
+                        <th>Severity</th>
+                        <th>CVSS Score</th>
+                        <th>Affected</th>
+                        <th>Status</th>
+                        <th>Discovered</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredVulnerabilities.length === 0 ? (
+                        <tr>
+                          <td colSpan="7" style={{ textAlign: 'center', padding: '2rem' }}>
+                            No vulnerabilities found
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredVulnerabilities.map((vuln) => (
+                          <tr key={vuln.id}>
+                            <td><code className="cve-code">{vuln.id}</code></td>
+                            <td>{vuln.title}</td>
+                            <td>
+                              <span className={`severity-badge ${vuln.severity}`}>
+                                {vuln.severity}
+                              </span>
+                            </td>
+                            <td>
+                              <span className="cvss-score">{vuln.cvssScore}</span>
+                            </td>
+                            <td>{vuln.affected} projects</td>
+                            <td>
+                              <span className={`status-badge ${vuln.status}`}>
+                                {vuln.status.replace('-', ' ')}
+                              </span>
+                            </td>
+                            <td>{new Date(vuln.discovered).toLocaleDateString()}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+
+            {/* Compliance Standards */}
+            <div className="report-card">
+              <div className="card-header">
+                <h3>Compliance Standards</h3>
+                <span className="badge badge-success">
+                  {compliance.complianceStandards?.filter(s => s.status === 'passing').length || 0}/
+                  {compliance.complianceStandards?.length || 0} Passing
+                </span>
+              </div>
+              {complianceLoading ? (
+                <div className="table-loading">
+                  <div className="spinner-large"></div>
+                </div>
+              ) : (
+                <div className="compliance-list">
+                  {compliance.complianceStandards?.map((standard, index) => (
+                    <div key={index} className="compliance-item">
+                      <div className="compliance-info">
+                        <strong>{standard.name}</strong>
+                        <div className="progress-bar">
+                          <div 
+                            className={`progress-fill ${standard.status}`}
+                            style={{ width: `${standard.score}%` }}
+                          />
+                        </div>
+                        <div className="compliance-meta">
+                          <span>{standard.score}% / Target: {standard.target}%</span>
+                          <span className={`status-dot ${standard.status}`}></span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Component Inventory */}
+            <div className="report-card">
+              <div className="card-header">
+                <h3>Component Inventory</h3>
+                <span className="badge badge-warning">
+                  {components.vulnerable || 0} vulnerable
+                </span>
+              </div>
+              {componentLoading ? (
+                <div className="table-loading">
+                  <div className="spinner-large"></div>
+                </div>
+              ) : (
+                <div className="component-stats">
+                  <div className="stat-row">
+                    <span>Total Components</span>
+                    <strong>{components.total || 0}</strong>
+                  </div>
+                  <div className="stat-row">
+                    <span>Outdated</span>
+                    <strong className="text-warning">{components.outdated || 0}</strong>
+                  </div>
+                  <div className="stat-row">
+                    <span>Vulnerable</span>
+                    <strong className="text-danger">{components.vulnerable || 0}</strong>
+                  </div>
+                  <div className="component-list">
+                    <h4>Top Components</h4>
+                    {components.topComponents?.map((comp, index) => (
+                      <div key={index} className="component-item">
+                        <div>
+                          <strong>{comp.name}</strong> <span className="version">v{comp.version}</span>
+                        </div>
+                        <div className="component-meta">
+                          <span>{comp.usageCount} uses</span>
+                          {comp.hasVulnerability && (
+                            <span className="vuln-indicator">⚠️</span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
             </div>
           </div>
@@ -346,7 +518,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Navigation */}
-            <div className="tool-card">
+            <Link to="/admin/users" className="tool-card tool-card-link">
               <div className="tool-icon">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -354,13 +526,8 @@ export default function AdminDashboard() {
               </div>
               <h3>User Management</h3>
               <p>Manage users, roles, and permissions</p>
-              <Link to="/admin/users">
-                <button className="action-btn">
-                  Go to User Management
-                </button>
-              </Link>
-              <small>View and manage all users</small>
-            </div>
+              <div className="link-arrow">→</div>
+            </Link>
           </div>
         </div>
 

@@ -11,7 +11,7 @@
 /* Dashboard Header */
 .dashboard-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   margin-bottom: 2rem;
   background: white;

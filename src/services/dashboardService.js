@@ -8,6 +8,13 @@ import {
   mockGetRecentActivities,
   mockGetVulnerabilityTrend,
   mockGetDashboardStats,
+  mockGetSBOMAnalytics,
+  mockGetRiskScores,
+  mockGetCompliance,
+  mockGetTopVulnerabilities,
+  mockGetComponentInventory,
+  mockGetAnalytics,
+  mockGetRiskHeatmap,
 } from './mockDashboardService';
 
 /**
@@ -92,6 +99,88 @@ export const dashboardService = {
       return mockGetDashboardStats();
     }
     const response = await axiosInstance.get('/stats/dashboard');
+    return response;
+  },
+
+  /**
+   * Get SBOM analytics
+   */
+  getSBOMAnalytics: async () => {
+    if (useMockDashboard()) {
+      return mockGetSBOMAnalytics();
+    }
+    const response = await axiosInstance.get('/analytics/sbom');
+    return response;
+  },
+
+  /**
+   * Get risk scores
+   */
+  getRiskScores: async () => {
+    if (useMockDashboard()) {
+      return mockGetRiskScores();
+    }
+    const response = await axiosInstance.get('/analytics/risk');
+    return response;
+  },
+
+  /**
+   * Get compliance data
+   */
+  getCompliance: async () => {
+    if (useMockDashboard()) {
+      return mockGetCompliance();
+    }
+    const response = await axiosInstance.get('/analytics/compliance');
+    return response;
+  },
+
+  /**
+   * Get top vulnerabilities
+   */
+  getTopVulnerabilities: async (limit = 5) => {
+    if (useMockDashboard()) {
+      return mockGetTopVulnerabilities(limit);
+    }
+    const response = await axiosInstance.get('/vulnerabilities/top', {
+      params: { limit },
+    });
+    return response;
+  },
+
+  /**
+   * Get component inventory
+   */
+  getComponentInventory: async () => {
+    if (useMockDashboard()) {
+      return mockGetComponentInventory();
+    }
+    const response = await axiosInstance.get('/components/inventory');
+    return response;
+  },
+
+  /**
+   * Get all analytics data
+   */
+  getAllAnalytics: async () => {
+    if (useMockDashboard()) {
+      return mockGetAnalytics();
+    }
+    const response = await axiosInstance.get('/analytics/all');
+    return response;
+  },
+
+  /**
+   * Get risk heatmap data
+   * @param {string} type - Type of heatmap: 'projects', 'components', or 'categories'
+   */
+  getRiskHeatmap: async (type = 'projects') => {
+    if (useMockDashboard()) {
+      return mockGetRiskHeatmap(type);
+    }
+    const response = await axiosInstance.get('/risk/heatmap', {
+      params: { type },
+    });
     return response;
   },
 };
