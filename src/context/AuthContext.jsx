@@ -52,14 +52,16 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(true);
       const response = await authService.login(credentials);
       
-      const { access_token, user: userData } = response;
+      // Handle both mock and real API response structures
+      const accessToken = response.access_token || response.data?.accessToken;
+      const userData = response.user || response.data?.user;
       
       // Save token
-      saveToken(access_token);
-      setToken(access_token);
+      saveToken(accessToken);
+      setToken(accessToken);
       
       // Decode token to get additional info if needed
-      const decoded = decodeToken(access_token);
+      const decoded = decodeToken(accessToken);
       
       // Set user data
       const userInfo = {
@@ -75,7 +77,7 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true, user: userInfo };
     } catch (error) {
-      console.log(error);
+      console.error('Login error:', error);
       const errorMessage = error.response?.data?.message || 'Login failed. Please try again.';
       toast.error(errorMessage);
       return { success: false, error: errorMessage };
@@ -110,11 +112,14 @@ export const AuthProvider = ({ children }) => {
   const hasRole = (requiredRole) => {
     if (!user || !user.role) return false;
     
+    // Normalize role comparison to be case-insensitive
+    const userRole = user.role.toLowerCase();
+    
     if (Array.isArray(requiredRole)) {
-      return requiredRole.includes(user.role);
+      return requiredRole.some(role => role.toLowerCase() === userRole);
     }
     
-    return user.role === requiredRole;
+    return userRole === requiredRole.toLowerCase();
   };
 
   const value = {

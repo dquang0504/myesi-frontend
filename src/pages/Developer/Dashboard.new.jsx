@@ -7,7 +7,6 @@ import {
   PieChartComponent,
   AreaChartComponent,
 } from '../../components/ChartComponent';
-import HeatmapComponent from '../../components/HeatmapComponent';
 import {
   useDashboardStats,
   useRecentActivities,
@@ -15,7 +14,6 @@ import {
   useSBOMAnalytics,
   useRiskScores,
   useTopVulnerabilities,
-  useRiskHeatmap,
 } from '../../hooks/useDashboard';
 import './Dashboard.css';
 import '../Admin/AnalyticsDashboard.css';
@@ -31,7 +29,6 @@ export default function DeveloperDashboard() {
   const { data: sbomData, isLoading: sbomLoading } = useSBOMAnalytics();
   const { data: riskData, isLoading: riskLoading } = useRiskScores();
   const { data: topVulnData, isLoading: topVulnLoading } = useTopVulnerabilities(10);
-  const { data: heatmapData, isLoading: heatmapLoading } = useRiskHeatmap('components');
 
   const stats = statsData?.data || {};
   const activities = activitiesData?.data?.activities || [];
@@ -39,7 +36,6 @@ export default function DeveloperDashboard() {
   const sbomAnalytics = sbomData?.data || {};
   const riskScores = riskData?.data || {};
   const topVulnerabilities = topVulnData?.data?.vulnerabilities || [];
-  const riskHeatmap = heatmapData?.data?.heatmap || [];
 
   const formatTimeAgo = (timestamp) => {
     const now = new Date();
@@ -79,24 +75,28 @@ export default function DeveloperDashboard() {
       title: 'Code Vulnerabilities',
       value: stats.totalVulnerabilities || 0,
       change: -8,
+      icon: '🐛',
       color: 'danger',
     },
     {
       title: 'Dependencies',
       value: stats.totalSBOMs || 0,
       change: +12,
+      icon: '📦',
       color: 'primary',
     },
     {
       title: 'Fixes This Week',
       value: stats.fixedThisWeek || 23,
       change: +15,
+      icon: '✅',
       color: 'success',
     },
     {
       title: 'Code Quality Score',
       value: `${stats.complianceScore || 85}%`,
       change: +3,
+      icon: '⭐',
       color: 'warning',
     },
   ];
@@ -109,6 +109,14 @@ export default function DeveloperDashboard() {
           <div>
             <h1>Developer Dashboard</h1>
             <p>Code Analysis, Dependency Scanning & Fix Tracking</p>
+          </div>
+          <div className="header-actions">
+            <button className="refresh-btn" onClick={() => window.location.reload()}>
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Refresh
+            </button>
           </div>
         </div>
 
@@ -123,6 +131,7 @@ export default function DeveloperDashboard() {
           ) : (
             developerStats.map((stat, index) => (
               <div key={index} className={`stat-card stat-${stat.color}`}>
+                <div className="stat-icon">{stat.icon}</div>
                 <div className="stat-content">
                   <h3>{stat.title}</h3>
                   <div className="stat-value">{stat.value}</div>
@@ -137,7 +146,7 @@ export default function DeveloperDashboard() {
 
         {/* === ANALYTICS SECTION === */}
         <div className="analytics-section">
-          <h2 className="section-title">Code & Dependency Analytics</h2>
+          <h2 className="section-title">📊 Code & Dependency Analytics</h2>
           
           <div className="analytics-grid">
             {/* Vulnerability Fix Progress */}
@@ -230,35 +239,12 @@ export default function DeveloperDashboard() {
                 />
               )}
             </div>
-
-            {/* Component Risk Heatmap - Full Width */}
-            <div className="analytics-card full-width">
-              <div className="card-header">
-                <h3>Component Risk Heatmap</h3>
-                <span className="badge badge-info">Risk by Architecture Layer</span>
-              </div>
-              {heatmapLoading ? (
-                <div className="chart-loading">
-                  <div className="spinner-large"></div>
-                </div>
-              ) : (
-                <HeatmapComponent
-                  data={riskHeatmap}
-                  xKey="x"
-                  yKey="y"
-                  valueKey="value"
-                  height={350}
-                  showValues={true}
-                  tooltip={true}
-                />
-              )}
-            </div>
           </div>
         </div>
 
         {/* === VULNERABILITY TRACKING === */}
         <div className="reports-section">
-          <h2 className="section-title">Vulnerability Tracking</h2>
+          <h2 className="section-title">🔍 Vulnerability Tracking</h2>
           
           <div className="reports-grid">
             {/* Active Vulnerabilities Table */}
@@ -337,7 +323,7 @@ export default function DeveloperDashboard() {
 
         {/* === INTERACTIVE TOOLS === */}
         <div className="interactive-section">
-          <h2 className="section-title">Developer Tools</h2>
+          <h2 className="section-title">🔧 Developer Tools</h2>
           
           <div className="tools-grid">
             {/* Dependency Upload */}

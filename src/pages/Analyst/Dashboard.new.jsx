@@ -7,39 +7,38 @@ import {
   PieChartComponent,
   AreaChartComponent,
 } from '../../components/ChartComponent';
-import HeatmapComponent from '../../components/HeatmapComponent';
 import {
   useDashboardStats,
   useRecentActivities,
   useVulnerabilityTrend,
   useSBOMAnalytics,
   useRiskScores,
+  useCompliance,
   useTopVulnerabilities,
-  useRiskHeatmap,
 } from '../../hooks/useDashboard';
 import './Dashboard.css';
 import '../Admin/AnalyticsDashboard.css';
 
-export default function DeveloperDashboard() {
+export default function AnalystDashboard() {
+  const [timeRange, setTimeRange] = useState('7');
   const [filterSeverity, setFilterSeverity] = useState('all');
-  const [uploadFile, setUploadFile] = useState(null);
   
   // Fetch dashboard data
   const { data: statsData, isLoading: statsLoading } = useDashboardStats();
   const { data: activitiesData, isLoading: activitiesLoading } = useRecentActivities(6);
-  const { data: trendData, isLoading: trendLoading } = useVulnerabilityTrend(14);
+  const { data: trendData, isLoading: trendLoading } = useVulnerabilityTrend(parseInt(timeRange));
   const { data: sbomData, isLoading: sbomLoading } = useSBOMAnalytics();
   const { data: riskData, isLoading: riskLoading } = useRiskScores();
+  const { data: complianceData, isLoading: complianceLoading } = useCompliance();
   const { data: topVulnData, isLoading: topVulnLoading } = useTopVulnerabilities(10);
-  const { data: heatmapData, isLoading: heatmapLoading } = useRiskHeatmap('components');
 
   const stats = statsData?.data || {};
   const activities = activitiesData?.data?.activities || [];
   const vulnerabilityTrend = trendData?.data?.trend || [];
   const sbomAnalytics = sbomData?.data || {};
   const riskScores = riskData?.data || {};
+  const compliance = complianceData?.data || {};
   const topVulnerabilities = topVulnData?.data?.vulnerabilities || [];
-  const riskHeatmap = heatmapData?.data?.heatmap || [];
 
   const formatTimeAgo = (timestamp) => {
     const now = new Date();
@@ -57,47 +56,75 @@ export default function DeveloperDashboard() {
     return `${diffDays}d ago`;
   };
 
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setUploadFile(file);
-      setTimeout(() => {
-        alert(`Dependency file "${file.name}" uploaded successfully!`);
-        setUploadFile(null);
-      }, 1000);
-    }
-  };
-
   // Filter vulnerabilities by severity
   const filteredVulnerabilities = filterSeverity === 'all'
     ? topVulnerabilities
     : topVulnerabilities.filter(v => v.severity === filterSeverity);
 
-  // Developer-specific stats
-  const developerStats = [
+  // Calculate trend percentages
+  const calculateTrend = (current, previous) => {
+    if (!previous || previous === 0) return 0;
+    return Math.round(((current - previous) / previous) * 100);
+  };
+
+  // Analyst-specific stats
+  const analystStats = [
     {
-      title: 'Code Vulnerabilities',
-      value: stats.totalVulnerabilities || 0,
-      change: -8,
+      title: 'Total Risk Score',
+      value: riskScores.overallRisk || 6.5,
+      subValue: '/10',
+      change: -5,
+      icon: '🎯',
+      color: 'warning',
+    },
+    {
+      title: 'High Risk Items',
+      value: stats.criticalVulnerabilities || 0,
+      change: -12,
+      icon: '⚠️',
       color: 'danger',
     },
     {
-      title: 'Dependencies',
-      value: stats.totalSBOMs || 0,
-      change: +12,
-      color: 'primary',
-    },
-    {
-      title: 'Fixes This Week',
-      value: stats.fixedThisWeek || 23,
-      change: +15,
+      title: 'Compliance Score',
+      value: `${compliance.overallScore || 0}%`,
+      change: +8,
+      icon: '✅',
       color: 'success',
     },
     {
-      title: 'Code Quality Score',
-      value: `${stats.complianceScore || 85}%`,
-      change: +3,
-      color: 'warning',
+      title: 'Analyzed Projects',
+      value: stats.totalSBOMs || 0,
+      change: +15,
+      icon: '📊',
+      color: 'primary',
+    },
+  ];
+
+  // Risk assessment data
+  const riskAssessment = [
+    { 
+      category: 'Critical Vulnerabilities',
+      count: stats.criticalVulnerabilities || 0,
+      trend: -12,
+      status: 'improving'
+    },
+    { 
+      category: 'High Risk Components',
+      count: 28,
+      trend: -5,
+      status: 'improving'
+    },
+    { 
+      category: 'Compliance Gaps',
+      count: 5,
+      trend: +2,
+      status: 'degrading'
+    },
+    { 
+      category: 'Security Incidents',
+      count: 2,
+      trend: 0,
+      status: 'stable'
     },
   ];
 
@@ -107,8 +134,27 @@ export default function DeveloperDashboard() {
         {/* Header */}
         <div className="dashboard-header">
           <div>
-            <h1>Developer Dashboard</h1>
-            <p>Code Analysis, Dependency Scanning & Fix Tracking</p>
+            <h1>Analyst Dashboard</h1>
+            <p>Risk Analysis, Trend Reports & Compliance Metrics</p>
+          </div>
+          <div className="header-actions">
+            <select 
+              value={timeRange} 
+              onChange={(e) => setTimeRange(e.target.value)}
+              className="time-range-select"
+              style={{ marginRight: '1rem', padding: '0.5rem', borderRadius: '6px', border: '1px solid #ddd' }}
+            >
+              <option value="7">Last 7 Days</option>
+              <option value="14">Last 14 Days</option>
+              <option value="30">Last 30 Days</option>
+              <option value="90">Last 90 Days</option>
+            </select>
+            <button className="refresh-btn" onClick={() => window.location.reload()}>
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Refresh
+            </button>
           </div>
         </div>
 
@@ -121,13 +167,17 @@ export default function DeveloperDashboard() {
               </div>
             ))
           ) : (
-            developerStats.map((stat, index) => (
+            analystStats.map((stat, index) => (
               <div key={index} className={`stat-card stat-${stat.color}`}>
+                <div className="stat-icon">{stat.icon}</div>
                 <div className="stat-content">
                   <h3>{stat.title}</h3>
-                  <div className="stat-value">{stat.value}</div>
-                  <div className={`stat-change ${stat.change > 0 ? 'positive' : 'negative'}`}>
-                    {stat.change > 0 ? '↑' : '↓'} {Math.abs(stat.change)}% from last week
+                  <div className="stat-value">
+                    {stat.value}
+                    {stat.subValue && <span style={{ fontSize: '1rem', color: '#888' }}>{stat.subValue}</span>}
+                  </div>
+                  <div className={`stat-change ${stat.change > 0 ? 'positive' : stat.change < 0 ? 'negative' : 'neutral'}`}>
+                    {stat.change > 0 ? '↑' : stat.change < 0 ? '↓' : '→'} {Math.abs(stat.change)}% from last period
                   </div>
                 </div>
               </div>
@@ -135,16 +185,16 @@ export default function DeveloperDashboard() {
           )}
         </div>
 
-        {/* === ANALYTICS SECTION === */}
+        {/* === RISK ANALYTICS === */}
         <div className="analytics-section">
-          <h2 className="section-title">Code & Dependency Analytics</h2>
+          <h2 className="section-title">📈 Risk & Trend Analysis</h2>
           
           <div className="analytics-grid">
-            {/* Vulnerability Fix Progress */}
+            {/* Risk Trend Over Time */}
             <div className="analytics-card">
               <div className="card-header">
-                <h3>Fix Progress (Last 14 Days)</h3>
-                <span className="badge badge-success">23 fixed</span>
+                <h3>Risk Trend Analysis</h3>
+                <span className="badge badge-warning">Overall Risk: {riskScores.overallRisk || 0}/10</span>
               </div>
               {trendLoading ? (
                 <div className="chart-loading">
@@ -154,9 +204,10 @@ export default function DeveloperDashboard() {
                 <LineChartComponent
                   data={vulnerabilityTrend}
                   lines={[
-                    { key: 'critical', name: 'Critical Fixed', color: '#ef4444' },
-                    { key: 'high', name: 'High Fixed', color: '#f59e0b' },
-                    { key: 'medium', name: 'Medium Fixed', color: '#eab308' },
+                    { key: 'critical', name: 'Critical', color: '#ef4444' },
+                    { key: 'high', name: 'High', color: '#f59e0b' },
+                    { key: 'medium', name: 'Medium', color: '#eab308' },
+                    { key: 'low', name: 'Low', color: '#10b981' },
                   ]}
                   xKey="date"
                   height={300}
@@ -164,12 +215,12 @@ export default function DeveloperDashboard() {
               )}
             </div>
 
-            {/* Vulnerability Distribution */}
+            {/* Risk Distribution */}
             <div className="analytics-card">
               <div className="card-header">
-                <h3>Current Vulnerabilities</h3>
+                <h3>Risk Distribution</h3>
                 <span className="risk-score">
-                  Total: <strong>{Object.values(riskScores.distribution || []).reduce((a, b) => a + (b.value || 0), 0)}</strong>
+                  Total Items: <strong>{Object.values(riskScores.distribution || []).reduce((a, b) => a + (b.value || 0), 0)}</strong>
                 </span>
               </div>
               {riskLoading ? (
@@ -187,21 +238,23 @@ export default function DeveloperDashboard() {
               )}
             </div>
 
-            {/* Dependency Scan Activity */}
+            {/* Compliance Trend */}
             <div className="analytics-card">
               <div className="card-header">
-                <h3>Dependency Scans</h3>
-                <span className="badge badge-primary">+{sbomAnalytics.scannedToday || 0} today</span>
+                <h3>Compliance Score Trend</h3>
+                <span className="compliance-score">
+                  {compliance.overallScore || 0}%
+                </span>
               </div>
-              {sbomLoading ? (
+              {complianceLoading ? (
                 <div className="chart-loading">
                   <div className="spinner-large"></div>
                 </div>
               ) : (
                 <AreaChartComponent
-                  data={sbomAnalytics.sbomTrend || []}
+                  data={compliance.complianceTrend || []}
                   areas={[
-                    { key: 'scanned', name: 'Scanned', color: '#3b82f6' },
+                    { key: 'score', name: 'Compliance Score', color: '#10b981' },
                   ]}
                   xKey="date"
                   height={280}
@@ -209,11 +262,11 @@ export default function DeveloperDashboard() {
               )}
             </div>
 
-            {/* Top Languages by Vulnerabilities */}
+            {/* SBOM Analysis Coverage */}
             <div className="analytics-card">
               <div className="card-header">
-                <h3>Vulnerabilities by Language</h3>
-                <span className="badge badge-warning">Top 5</span>
+                <h3>Analysis Coverage</h3>
+                <span className="badge badge-primary">+{sbomAnalytics.scannedToday || 0} today</span>
               </div>
               {sbomLoading ? (
                 <div className="chart-loading">
@@ -223,48 +276,85 @@ export default function DeveloperDashboard() {
                 <BarChartComponent
                   data={sbomAnalytics.topLanguages || []}
                   bars={[
-                    { key: 'count', name: 'Vulnerabilities', color: '#f59e0b' },
+                    { key: 'count', name: 'Projects Analyzed', color: '#3b82f6' },
                   ]}
                   xKey="name"
                   height={280}
                 />
               )}
             </div>
-
-            {/* Component Risk Heatmap - Full Width */}
-            <div className="analytics-card full-width">
-              <div className="card-header">
-                <h3>Component Risk Heatmap</h3>
-                <span className="badge badge-info">Risk by Architecture Layer</span>
-              </div>
-              {heatmapLoading ? (
-                <div className="chart-loading">
-                  <div className="spinner-large"></div>
-                </div>
-              ) : (
-                <HeatmapComponent
-                  data={riskHeatmap}
-                  xKey="x"
-                  yKey="y"
-                  valueKey="value"
-                  height={350}
-                  showValues={true}
-                  tooltip={true}
-                />
-              )}
-            </div>
           </div>
         </div>
 
-        {/* === VULNERABILITY TRACKING === */}
+        {/* === RISK ASSESSMENT === */}
         <div className="reports-section">
-          <h2 className="section-title">Vulnerability Tracking</h2>
+          <h2 className="section-title">🎯 Risk Assessment</h2>
           
           <div className="reports-grid">
-            {/* Active Vulnerabilities Table */}
+            {/* Risk Categories */}
+            <div className="report-card">
+              <div className="card-header">
+                <h3>Risk Categories</h3>
+                <span className="badge badge-info">4 categories</span>
+              </div>
+              <div className="risk-categories">
+                {riskAssessment.map((risk, index) => (
+                  <div key={index} className="risk-category-item">
+                    <div className="risk-info">
+                      <strong>{risk.category}</strong>
+                      <div className="risk-meta">
+                        <span className="risk-count">{risk.count} items</span>
+                        <span className={`trend-indicator ${risk.status}`}>
+                          {risk.trend > 0 ? '↑' : risk.trend < 0 ? '↓' : '→'} {Math.abs(risk.trend)}%
+                        </span>
+                      </div>
+                    </div>
+                    <div className={`status-indicator ${risk.status}`}></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Compliance Standards */}
+            <div className="report-card">
+              <div className="card-header">
+                <h3>Compliance Status</h3>
+                <span className="badge badge-success">
+                  {compliance.complianceStandards?.filter(s => s.status === 'passing').length || 0}/
+                  {compliance.complianceStandards?.length || 0} Passing
+                </span>
+              </div>
+              {complianceLoading ? (
+                <div className="table-loading">
+                  <div className="spinner-large"></div>
+                </div>
+              ) : (
+                <div className="compliance-list">
+                  {compliance.complianceStandards?.map((standard, index) => (
+                    <div key={index} className="compliance-item">
+                      <div className="compliance-info">
+                        <strong>{standard.name}</strong>
+                        <div className="progress-bar">
+                          <div 
+                            className={`progress-fill ${standard.status}`}
+                            style={{ width: `${standard.score}%` }}
+                          />
+                        </div>
+                        <div className="compliance-meta">
+                          <span>{standard.score}% / Target: {standard.target}%</span>
+                          <span className={`status-dot ${standard.status}`}></span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Top Vulnerabilities */}
             <div className="report-card full-width">
               <div className="card-header">
-                <h3>Active Vulnerabilities</h3>
+                <h3>Critical Vulnerabilities Report</h3>
                 <div className="filter-group">
                   <select 
                     value={filterSeverity} 
@@ -291,10 +381,10 @@ export default function DeveloperDashboard() {
                         <th>CVE ID</th>
                         <th>Title</th>
                         <th>Severity</th>
-                        <th>CVSS</th>
-                        <th>Affected Projects</th>
+                        <th>CVSS Score</th>
+                        <th>Risk Level</th>
+                        <th>Affected</th>
                         <th>Status</th>
-                        <th>Assigned To</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -317,13 +407,17 @@ export default function DeveloperDashboard() {
                             <td>
                               <span className="cvss-score">{vuln.cvssScore}</span>
                             </td>
+                            <td>
+                              <span className={`risk-level ${vuln.cvssScore >= 9 ? 'critical' : vuln.cvssScore >= 7 ? 'high' : 'medium'}`}>
+                                {vuln.cvssScore >= 9 ? 'Critical' : vuln.cvssScore >= 7 ? 'High' : 'Medium'}
+                              </span>
+                            </td>
                             <td>{vuln.affected} projects</td>
                             <td>
                               <span className={`status-badge ${vuln.status}`}>
                                 {vuln.status.replace('-', ' ')}
                               </span>
                             </td>
-                            <td>Developer Team</td>
                           </tr>
                         ))
                       )}
@@ -335,76 +429,69 @@ export default function DeveloperDashboard() {
           </div>
         </div>
 
-        {/* === INTERACTIVE TOOLS === */}
+        {/* === ANALYTICS TOOLS === */}
         <div className="interactive-section">
-          <h2 className="section-title">Developer Tools</h2>
+          <h2 className="section-title">🔧 Analysis Tools</h2>
           
           <div className="tools-grid">
-            {/* Dependency Upload */}
+            {/* Risk Assessment Report */}
             <div className="tool-card">
               <div className="tool-icon">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
               </div>
-              <h3>Scan Dependencies</h3>
-              <p>Upload package.json, pom.xml, requirements.txt</p>
-              <input
-                type="file"
-                id="dependency-upload"
-                accept=".json,.xml,.txt,.lock"
-                onChange={handleFileUpload}
-                style={{ display: 'none' }}
-              />
-              <label htmlFor="dependency-upload" className="upload-btn">
-                {uploadFile ? `Scanning ${uploadFile.name}...` : 'Choose File'}
-              </label>
-              <small>Supported: npm, maven, pip, composer</small>
-            </div>
-
-            {/* Code Scan */}
-            <div className="tool-card">
-              <div className="tool-icon">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                </svg>
-              </div>
-              <h3>Run Code Scan</h3>
-              <p>Analyze code for security vulnerabilities</p>
-              <button className="action-btn" onClick={() => alert('Starting code security scan...')}>
-                Start Scan
-              </button>
-              <small>SAST, secrets detection, code quality</small>
-            </div>
-
-            {/* Fix Generator */}
-            <div className="tool-card">
-              <div className="tool-icon">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </div>
-              <h3>Generate Fix Report</h3>
-              <p>Create detailed remediation guide</p>
-              <button className="action-btn" onClick={() => alert('Generating fix report...')}>
+              <h3>Risk Assessment Report</h3>
+              <p>Comprehensive risk analysis report</p>
+              <button className="action-btn" onClick={() => alert('Generating risk assessment report...')}>
                 Generate Report
               </button>
-              <small>Includes code examples and patches</small>
+              <small>PDF with trends, metrics, recommendations</small>
             </div>
 
-            {/* Documentation */}
+            {/* Trend Analysis */}
             <div className="tool-card">
               <div className="tool-icon">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
                 </svg>
               </div>
-              <h3>Security Docs</h3>
-              <p>Best practices and guidelines</p>
-              <button className="action-btn" onClick={() => alert('Opening security documentation...')}>
-                View Docs
+              <h3>Trend Analysis</h3>
+              <p>Historical trends and predictions</p>
+              <button className="action-btn" onClick={() => alert('Starting trend analysis...')}>
+                Analyze Trends
               </button>
-              <small>OWASP, coding standards, examples</small>
+              <small>AI-powered insights and forecasts</small>
+            </div>
+
+            {/* Compliance Audit */}
+            <div className="tool-card">
+              <div className="tool-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3>Compliance Audit</h3>
+              <p>Run comprehensive compliance check</p>
+              <button className="action-btn" onClick={() => alert('Running compliance audit...')}>
+                Run Audit
+              </button>
+              <small>Check against all standards</small>
+            </div>
+
+            {/* Export Data */}
+            <div className="tool-card">
+              <div className="tool-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+              </div>
+              <h3>Export Analytics</h3>
+              <p>Download data for external analysis</p>
+              <button className="action-btn" onClick={() => alert('Exporting analytics data...')}>
+                Export CSV/Excel
+              </button>
+              <small>Includes all metrics and raw data</small>
             </div>
           </div>
         </div>
@@ -412,7 +499,7 @@ export default function DeveloperDashboard() {
         {/* Recent Activity */}
         <div className="recent-activity">
           <div className="section-header">
-            <h2>Recent Development Activity</h2>
+            <h2>Recent Analysis Activity</h2>
             <button className="view-all-btn">View All</button>
           </div>
 
@@ -431,7 +518,7 @@ export default function DeveloperDashboard() {
             <table className="activity-table">
               <thead>
                 <tr>
-                  <th>Developer</th>
+                  <th>Analyst</th>
                   <th>Action</th>
                   <th>Target</th>
                   <th>Time</th>
