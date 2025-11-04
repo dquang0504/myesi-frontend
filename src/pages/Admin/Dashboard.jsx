@@ -354,10 +354,8 @@ export default function AdminDashboard() {
               </div>
               <h3>User Management</h3>
               <p>Manage users, roles, and permissions</p>
-              <Link to="/admin/users">
-                <button className="action-btn">
-                  Go to User Management
-                </button>
+              <Link to="/admin/users" className="action-btn tool-card-link">
+                Go to User Management
               </Link>
               <small>View and manage all users</small>
             </div>

@@ -510,6 +510,12 @@
   transition: all 0.2s;
 }
 
+/* Ensure links styled as action buttons span full width */
+.action-btn.tool-card-link {
+  display: inline-block;
+  text-align: center;
+}
+
 .upload-btn:hover,
 .action-btn:hover {
   transform: translateY(-2px);
