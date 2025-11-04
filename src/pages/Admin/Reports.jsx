@@ -1,11 +1,13 @@
 import { useState, useMemo } from 'react';
 import { useTopVulnerabilities, useCompliance, useComponentInventory } from '../../hooks/useDashboard';
+import { reportService } from '../../services/reportService';
 import AdminLayout from '../../components/AdminLayout';
 import './Reports.css';
 
 const Reports = () => {
   const [filterSeverity, setFilterSeverity] = useState('all');
   const [reportType, setReportType] = useState('vulnerabilities'); // vulnerabilities, compliance, components, all
+  const [isDownloading, setIsDownloading] = useState(false);
 
   // Fetch data
   const { data: topVulnData, isLoading: topVulnLoading } = useTopVulnerabilities();
@@ -23,9 +25,32 @@ const Reports = () => {
   }, [vulnerabilities, filterSeverity]);
 
   // Export functionality
-  const handleExportReport = (format) => {
-    alert(`Exporting ${reportType} report as ${format.toUpperCase()}...`);
-    // In production, this would generate and download the report
+  const handleExportReport = async (format) => {
+    setIsDownloading(true);
+    try {
+      let response;
+      
+      // Call appropriate service based on report type
+      if (reportType === 'compliance' || reportType === 'all') {
+        response = await reportService.downloadComplianceReport(format);
+      } else if (reportType === 'vulnerabilities') {
+        response = await reportService.downloadVulnerabilityReport(format, { severity: filterSeverity });
+      } else if (reportType === 'components') {
+        response = await reportService.downloadSBOMReport(format);
+      } else {
+        response = await reportService.downloadComplianceReport(format); // default
+      }
+      
+      if (response.data.success) {
+        reportService.triggerDownload(response.data.blob, response.data.filename);
+        alert(`${reportType} report downloaded successfully as ${format.toUpperCase()}`);
+      }
+    } catch (error) {
+      console.error('Error downloading report:', error);
+      alert(`Failed to download report. Error: ${error.message}`);
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
@@ -48,17 +73,25 @@ const Reports = () => {
               </select>
             </div>
             <div className="export-buttons">
-              <button className="export-btn" onClick={() => handleExportReport('pdf')}>
+              <button 
+                className="export-btn" 
+                onClick={() => handleExportReport('pdf')}
+                disabled={isDownloading}
+              >
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                Export PDF
+                {isDownloading ? 'Downloading...' : 'Export PDF'}
               </button>
-              <button className="export-btn" onClick={() => handleExportReport('csv')}>
+              <button 
+                className="export-btn" 
+                onClick={() => handleExportReport('csv')}
+                disabled={isDownloading}
+              >
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
-                Export CSV
+                {isDownloading ? 'Downloading...' : 'Export CSV'}
               </button>
             </div>
           </div>
