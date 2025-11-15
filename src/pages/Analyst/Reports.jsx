@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AdminLayout from '../../components/AdminLayout';
 import { AreaChartComponent, BarChartComponent } from '../../components/ChartComponent';
+import { reportService } from '../../services/reportService';
 import './Reports.css';
 
 export default function AnalystReports() {
+  const [isDownloading, setIsDownloading] = useState(false);
+  
   const vulnTrend = [
     { date: '2025-01-01', critical: 5, high: 8, medium: 12 },
     { date: '2025-02-01', critical: 6, high: 9, medium: 10 },
@@ -15,6 +18,22 @@ export default function AnalystReports() {
     { name: 'Passed', value: 320 },
     { name: 'Failed', value: 45 },
   ];
+
+  const handleDownloadReport = async (format) => {
+    setIsDownloading(true);
+    try {
+      const response = await reportService.downloadComplianceReport(format);
+      if (response.data.success) {
+        reportService.triggerDownload(response.data.blob, response.data.filename);
+        alert(`Report downloaded successfully as ${format.toUpperCase()}`);
+      }
+    } catch (error) {
+      console.error('Error downloading report:', error);
+      alert(`Failed to download report. Error: ${error.message}`);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
 
   return (
     <AdminLayout>
@@ -47,8 +66,21 @@ export default function AnalystReports() {
           <div className="card-content">
             <p className="muted">Select filters and export findings as CSV/PDF for audits.</p>
             <div style={{ marginTop: 12 }}>
-              <button className="btn btn-outline">Export CSV</button>
-              <button className="btn btn-outline" style={{ marginLeft: 8 }}>Export PDF</button>
+              <button 
+                className="btn btn-outline" 
+                onClick={() => handleDownloadReport('csv')}
+                disabled={isDownloading}
+              >
+                {isDownloading ? 'Downloading...' : 'Export CSV'}
+              </button>
+              <button 
+                className="btn btn-outline" 
+                style={{ marginLeft: 8 }}
+                onClick={() => handleDownloadReport('pdf')}
+                disabled={isDownloading}
+              >
+                {isDownloading ? 'Downloading...' : 'Export PDF'}
+              </button>
             </div>
           </div>
         </div>

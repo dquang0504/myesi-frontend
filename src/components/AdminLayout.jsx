@@ -6,7 +6,13 @@ export default function AdminLayout({ children }) {
   return (
     <div className="admin-layout">
       <AdminSidebar />
-      <main className="admin-main-content">
+      <main 
+        id="main-content"
+        className="admin-main-content"
+        role="main"
+        aria-label="Main content"
+        tabIndex="-1"
+      >
         {children}
       </main>
     </div>

@@ -7,6 +7,7 @@ import {
   AreaChartComponent,
 } from '../../components/ChartComponent';
 import HeatmapComponent from '../../components/HeatmapComponent';
+import RiskByProjectChart from '../../components/RiskByProjectChart';
 import {
   useDashboardStats,
   useVulnerabilityTrend,
@@ -129,6 +130,23 @@ export default function AuditorDashboard() {
                   nameKey="name"
                   height={280}
                   colors={['#ef4444', '#f59e0b', '#eab308', '#10b981']}
+                />
+              )}
+            </div>
+
+            {/* Risk by Project (severity breakdown) */}
+            <div className="analytics-card">
+              <div className="card-header">
+                <h3>Risk by Project (Severity)</h3>
+              </div>
+              {riskLoading ? (
+                <div className="chart-loading"><div className="spinner-large"></div></div>
+              ) : (
+                <RiskByProjectChart
+                  projects={riskScores.riskByProject || []}
+                  distribution={riskScores.distribution || []}
+                  xKey="project"
+                  height={280}
                 />
               )}
             </div>
