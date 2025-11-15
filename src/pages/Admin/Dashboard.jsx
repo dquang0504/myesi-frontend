@@ -15,13 +15,17 @@ import {
   useVulnerabilityTrend,
   useSBOMAnalytics,
   useRiskScores,
-  useRiskHeatmap,
+  useCompliance,
+  useTopVulnerabilities,
+  useComponentInventory,
 } from '../../hooks/useDashboard';
+import { useCurrentSubscription } from '../../hooks/useSubscription';
 import './Dashboard.css';
 import './AnalyticsDashboard.css';
 
 export default function AdminDashboard() {
   const [uploadFile, setUploadFile] = useState(null);
+  const [filterSeverity, setFilterSeverity] = useState('all');
   
   // Fetch dashboard data
   const { data: statsData, isLoading: statsLoading } = useDashboardStats();
@@ -29,14 +33,20 @@ export default function AdminDashboard() {
   const { data: trendData, isLoading: trendLoading } = useVulnerabilityTrend(7);
   const { data: sbomData, isLoading: sbomLoading } = useSBOMAnalytics();
   const { data: riskData, isLoading: riskLoading } = useRiskScores();
-  const { data: heatmapData, isLoading: heatmapLoading } = useRiskHeatmap('projects');
+  const { data: complianceData, isLoading: complianceLoading } = useCompliance();
+  const { data: topVulnData, isLoading: topVulnLoading } = useTopVulnerabilities(5);
+  const { data: componentData, isLoading: componentLoading } = useComponentInventory();
+  const { data: subscriptionData, isLoading: subLoading } = useCurrentSubscription();
 
   const stats = statsData?.data || {};
   const activities = activitiesData?.data?.activities || [];
   const vulnerabilityTrend = trendData?.data?.trend || [];
   const sbomAnalytics = sbomData?.data || {};
   const riskScores = riskData?.data || {};
-  const riskHeatmap = heatmapData?.data?.heatmap || [];
+  const compliance = complianceData?.data || {};
+  const topVulnerabilities = topVulnData?.data?.vulnerabilities || [];
+  const components = componentData?.data || {};
+  const subscription = subscriptionData?.subscription;
 
   const formatTimeAgo = (timestamp) => {
     const now = new Date();
@@ -65,6 +75,10 @@ export default function AdminDashboard() {
     }
   };
 
+  const filteredVulnerabilities = filterSeverity === 'all' 
+    ? topVulnerabilities 
+    : topVulnerabilities.filter(v => v.severity === filterSeverity);
+
   if (statsLoading) {
     return (
       <AdminLayout>
@@ -85,7 +99,7 @@ export default function AdminDashboard() {
         <div className="dashboard-header">
           <div>
             <h1>Admin Dashboard</h1>
-            <p>Comprehensive SBOM, Risk & Compliance Analytics</p>
+            <p>Comprehensive SBOM, Vulnerability, Risk, Compliance & Billing Management</p>
           </div>
         </div>
 
@@ -261,6 +275,30 @@ export default function AdminDashboard() {
               )}
             </div>
 
+            {/* Compliance Score */}
+            <div className="analytics-card">
+              <div className="card-header">
+                <h3>Compliance Trend</h3>
+                <span className="compliance-score">
+                  {compliance.overallScore || 0}%
+                </span>
+              </div>
+              {complianceLoading ? (
+                <div className="chart-loading">
+                  <div className="spinner-large"></div>
+                </div>
+              ) : (
+                <AreaChartComponent
+                  data={compliance.complianceTrend || []}
+                  areas={[
+                    { key: 'score', name: 'Compliance Score', color: '#10b981' },
+                  ]}
+                  xKey="date"
+                  height={280}
+                />
+              )}
+            </div>
+
             {/* Top Languages */}
             <div className="analytics-card">
               <div className="card-header">
@@ -283,26 +321,164 @@ export default function AdminDashboard() {
               )}
             </div>
 
-            {/* Risk Heatmap - Full Width */}
-            <div className="analytics-card full-width">
+            {/* Component Inventory Summary */}
+            <div className="analytics-card">
               <div className="card-header">
-                <h3>Project Risk Heatmap</h3>
-                <span className="badge badge-info">Weekly Risk Scores</span>
+                <h3>Component Inventory</h3>
+                <span className="badge badge-warning">
+                  {components.vulnerable || 0} vulnerable
+                </span>
               </div>
-              {heatmapLoading ? (
+              {componentLoading ? (
                 <div className="chart-loading">
                   <div className="spinner-large"></div>
                 </div>
               ) : (
-                <HeatmapComponent
-                  data={riskHeatmap}
-                  xKey="x"
-                  yKey="y"
-                  valueKey="value"
-                  height={350}
-                  showValues={true}
-                  tooltip={true}
-                />
+                <div className="component-stats">
+                  <div className="stat-row">
+                    <span>Total Components</span>
+                    <strong>{components.total || 0}</strong>
+                  </div>
+                  <div className="stat-row">
+                    <span>Outdated</span>
+                    <strong className="text-warning">{components.outdated || 0}</strong>
+                  </div>
+                  <div className="stat-row">
+                    <span>Vulnerable</span>
+                    <strong className="text-danger">{components.vulnerable || 0}</strong>
+                  </div>
+                  <div className="component-chart">
+                    <PieChartComponent
+                      data={[
+                        { name: 'Up-to-date', value: (components.total || 0) - (components.outdated || 0) - (components.vulnerable || 0) },
+                        { name: 'Outdated', value: components.outdated || 0 },
+                        { name: 'Vulnerable', value: components.vulnerable || 0 }
+                      ]}
+                      dataKey="value"
+                      nameKey="name"
+                      height={180}
+                      colors={['#10b981', '#f59e0b', '#ef4444']}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* === VULNERABILITY REPORTS SECTION === */}
+        <div className="reports-section">
+          <h2 className="section-title">🔍 Top Vulnerabilities</h2>
+          
+          <div className="reports-grid">
+            {/* Top Vulnerabilities Table */}
+            <div className="report-card full-width">
+              <div className="card-header">
+                <h3>Critical & High Severity Vulnerabilities</h3>
+                <div className="filter-group">
+                  <select 
+                    value={filterSeverity} 
+                    onChange={(e) => setFilterSeverity(e.target.value)}
+                    className="severity-filter"
+                  >
+                    <option value="all">All Severities</option>
+                    <option value="critical">Critical</option>
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                  </select>
+                  <Link to="/admin/reports" className="view-all-link">
+                    View Full Report →
+                  </Link>
+                </div>
+              </div>
+              {topVulnLoading ? (
+                <div className="table-loading">
+                  <div className="spinner-large"></div>
+                </div>
+              ) : (
+                <div className="table-container">
+                  <table className="vulnerability-table">
+                    <thead>
+                      <tr>
+                        <th>CVE ID</th>
+                        <th>Title</th>
+                        <th>Severity</th>
+                        <th>CVSS Score</th>
+                        <th>Affected</th>
+                        <th>Status</th>
+                        <th>Discovered</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredVulnerabilities.length === 0 ? (
+                        <tr>
+                          <td colSpan="7" style={{ textAlign: 'center', padding: '2rem' }}>
+                            No vulnerabilities found
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredVulnerabilities.slice(0, 10).map((vuln) => (
+                          <tr key={vuln.id}>
+                            <td><code className="cve-code">{vuln.id}</code></td>
+                            <td>{vuln.title}</td>
+                            <td>
+                              <span className={`severity-badge ${vuln.severity}`}>
+                                {vuln.severity}
+                              </span>
+                            </td>
+                            <td>
+                              <span className="cvss-score">{vuln.cvssScore}</span>
+                            </td>
+                            <td>{vuln.affected} projects</td>
+                            <td>
+                              <span className={`status-badge ${vuln.status}`}>
+                                {vuln.status.replace('-', ' ')}
+                              </span>
+                            </td>
+                            <td>{new Date(vuln.discovered).toLocaleDateString()}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+
+            {/* Compliance Standards */}
+            <div className="report-card">
+              <div className="card-header">
+                <h3>Compliance Standards</h3>
+                <span className="badge badge-success">
+                  {compliance.complianceStandards?.filter(s => s.status === 'passing').length || 0}/
+                  {compliance.complianceStandards?.length || 0} Passing
+                </span>
+              </div>
+              {complianceLoading ? (
+                <div className="table-loading">
+                  <div className="spinner-large"></div>
+                </div>
+              ) : (
+                <div className="compliance-list">
+                  {compliance.complianceStandards?.map((standard, index) => (
+                    <div key={index} className="compliance-item">
+                      <div className="compliance-info">
+                        <strong>{standard.name}</strong>
+                        <div className="progress-bar">
+                          <div 
+                            className={`progress-fill ${standard.status}`}
+                            style={{ width: `${standard.score}%` }}
+                          />
+                        </div>
+                        <div className="compliance-meta">
+                          <span>{standard.score}% / Target: {standard.target}%</span>
+                          <span className={`status-dot ${standard.status}`}></span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           </div>
@@ -310,7 +486,7 @@ export default function AdminDashboard() {
 
         {/* === INTERACTIVE FEATURES === */}
         <div className="interactive-section">
-          <h2 className="section-title">🔧 Interactive Tools</h2>
+          <h2 className="section-title">🔧 Quick Actions & Module Access</h2>
           
           <div className="tools-grid">
             {/* SBOM Upload */}
@@ -335,7 +511,7 @@ export default function AdminDashboard() {
               <small>Supported formats: JSON, XML, SPDX</small>
             </div>
 
-            {/* Quick Actions */}
+            {/* Generate Report */}
             <div className="tool-card">
               <div className="tool-icon">
                 <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -344,11 +520,61 @@ export default function AdminDashboard() {
               </div>
               <h3>Generate Report</h3>
               <p>Create comprehensive vulnerability report</p>
-              <button className="action-btn" onClick={() => alert('Report generation started!')}>
-                Generate PDF Report
-              </button>
+              <Link to="/admin/reports" className="action-btn">
+                Go to Reports
+              </Link>
               <small>Includes all analytics and findings</small>
             </div>
+
+            {/* Billing & Subscription */}
+            <Link to="/admin/billing" className="tool-card tool-card-link">
+              <div className="tool-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                </svg>
+              </div>
+              <h3>Billing Status</h3>
+              <p>View invoices and payment history</p>
+              {!subLoading && subscription && (
+                <div className="subscription-badge">
+                  <span className={`status-indicator ${subscription.status}`}></span>
+                  {subscription.planName || 'Active'}
+                </div>
+              )}
+              <small>Manage payment methods</small>
+            </Link>
+
+            {/* Subscription Management */}
+            <Link to="/admin/subscription" className="tool-card tool-card-link">
+              <div className="tool-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3>Subscription</h3>
+              <p>Manage your subscription plan</p>
+              {!subLoading && subscription && (
+                <div className="plan-info">
+                  <strong>${(subscription.amount || 0) / 100}/mo</strong>
+                </div>
+              )}
+              <small>Upgrade or modify plan</small>
+            </Link>
+
+            {/* User Management */}
+            <Link to="/admin/users" className="tool-card tool-card-link">
+              <div className="tool-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </div>
+              <h3>User Management</h3>
+              <p>Manage users, roles, and permissions</p>
+              <div className="user-count-badge">
+                {stats.users?.total || 0} Users
+              </div>
+              <small>View and manage all users</small>
+            </Link>
 
             {/* Data Refresh */}
             <div className="tool-card">
@@ -363,21 +589,6 @@ export default function AdminDashboard() {
                 Refresh Dashboard
               </button>
               <small>Last updated: {new Date().toLocaleTimeString()}</small>
-            </div>
-
-            {/* Navigation */}
-            <div className="tool-card">
-              <div className="tool-icon">
-                <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-              </div>
-              <h3>User Management</h3>
-              <p>Manage users, roles, and permissions</p>
-              <Link to="/admin/users" className="action-btn tool-card-link">
-                Go to User Management
-              </Link>
-              <small>View and manage all users</small>
             </div>
           </div>
         </div>
