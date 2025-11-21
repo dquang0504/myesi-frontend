@@ -4,9 +4,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ToastContainer } from 'react-toastify';
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import App from './App';
 import './index.css';
-import './styles/accessibility.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Create React Query client
@@ -20,26 +20,16 @@ const queryClient = new QueryClient({
   },
 });
 
-// Add skip link for accessibility
-const skipLink = document.createElement('a');
-skipLink.href = '#main-content';
-skipLink.className = 'skip-link';
-skipLink.textContent = 'Skip to main content';
-skipLink.setAttribute('aria-label', 'Skip to main content');
-document.body.prepend(skipLink);
-
-// Set lang attribute for accessibility
-document.documentElement.setAttribute('lang', 'en');
-
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <App />
-        <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
+      <ThemeProvider>
+        <AuthProvider>
+          <App />
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
           newestOnTop
           closeOnClick
           rtl={false}
@@ -47,10 +37,9 @@ createRoot(document.getElementById('root')).render(
           draggable
           pauseOnHover
           theme="light"
-          role="alert"
-          aria-live="polite"
         />
       </AuthProvider>
+      </ThemeProvider>
       {import.meta.env.VITE_ENABLE_DEVTOOLS === 'true' && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   </React.StrictMode>

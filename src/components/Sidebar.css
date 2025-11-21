@@ -1,6 +1,6 @@
 .sidebar {
-  background: #0d1b2a;
-  color: #fff;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
   width: 100%;
   height: 100%;
   display: flex;
@@ -8,16 +8,44 @@
   justify-content: space-between;
   padding: 20px;
   box-sizing: border-box;
+  transition: background-color 0.1s ease;
 }
 
 
-.logo h2 {
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.logo-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 8px;
+}
+
+.logo-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.logo-text h2 {
   margin: 0;
+  color: #000000;
 }
 
-.logo p {
+.logo-text p {
   font-size: 12px;
-  color: #9ca3af;
+  color: #000000;
+  opacity: 0.7;
 }
 
 .nav-menu {
@@ -28,7 +56,7 @@
 }
 
 .nav-item {
-  color: #e5e7eb;
+  color: var(--sidebar-text);
   text-decoration: none;
   padding: 10px 14px;
   border-radius: 8px;
@@ -37,8 +65,8 @@
 
 .nav-item.active,
 .nav-item:hover {
-  background: #1e3a8a;
-  color: white;
+  background: var(--sidebar-hover);
+  color: var(--sidebar-text);
 }
 
 .user-section {
@@ -64,11 +92,13 @@
 
 .username {
   font-weight: bold;
+  color: var(--sidebar-text);
 }
 
 .role {
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--sidebar-text);
+  opacity: 0.7;
 }
 
 .logout-btn {

@@ -4,6 +4,8 @@
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  background: var(--bg-secondary);
+  transition: background-color 0.1s ease;
 }
 
 .billing-header {
@@ -13,12 +15,12 @@
 .billing-header h1 {
   font-size: 2rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
 .billing-header p {
-  color: #64748b;
+  color: var(--text-secondary);
   font-size: 1rem;
 }
 
@@ -35,8 +37,8 @@
 .spinner {
   width: 48px;
   height: 48px;
-  border: 4px solid #e2e8f0;
-  border-top-color: #3b82f6;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--brand-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -49,37 +51,41 @@
 .no-subscription {
   text-align: center;
   padding: 4rem 2rem;
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+  transition: background-color 0.1s ease;
 }
 
 .no-sub-icon {
   width: 80px;
   height: 80px;
-  color: #94a3b8;
+  color: var(--text-muted);
   margin-bottom: 1.5rem;
 }
 
 .no-subscription h2 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
 .no-subscription p {
-  color: #64748b;
+  color: var(--text-secondary);
   margin-bottom: 1.5rem;
 }
 
 /* Billing Section */
 .billing-section {
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+  transition: background-color 0.1s ease;
 }
 
 .section-header {
@@ -88,13 +94,13 @@
   align-items: center;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .section-header h2 {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-primary);
 }
 
 /* Status Badges */
@@ -272,7 +278,7 @@
   height: 100%;
   background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
   border-radius: 4px;
-  transition: width 0.3s ease;
+  transition: width 0.1s ease;
 }
 
 /* Payment Method */
