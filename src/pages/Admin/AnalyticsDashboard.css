@@ -510,6 +510,12 @@
   transition: all 0.2s;
 }
 
+/* Ensure links styled as action buttons span full width */
+.action-btn.tool-card-link {
+  display: inline-block;
+  text-align: center;
+}
+
 .upload-btn:hover,
 .action-btn:hover {
   transform: translateY(-2px);
@@ -690,3 +696,256 @@
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
+
+/* Responsive Design for Analytics Dashboard */
+@media (max-width: 1024px) {
+  .analytics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  }
+
+  .reports-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .analytics-section,
+  .reports-section,
+  .interactive-section {
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .analytics-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .analytics-card {
+    padding: 1rem;
+  }
+
+  .analytics-card.full-width {
+    grid-column: 1;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .card-header h3 {
+    font-size: 1.125rem;
+  }
+
+  .badge {
+    padding: 0.25rem 0.625rem;
+    font-size: 0.8125rem;
+  }
+
+  .risk-score,
+  .compliance-score {
+    font-size: 1.25rem;
+  }
+
+  .risk-score strong {
+    font-size: 1.125rem;
+  }
+
+  /* Make charts smaller on mobile */
+  .chart-loading,
+  .table-loading {
+    min-height: 200px;
+  }
+
+  /* Reports Section */
+  .reports-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .report-card {
+    padding: 1rem;
+  }
+
+  .report-card.full-width {
+    grid-column: 1;
+  }
+
+  /* Filter Group */
+  .filter-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .severity-filter {
+    width: 100%;
+    padding: 0.625rem 0.875rem;
+  }
+
+  /* Tables - Make scrollable on mobile */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -1rem;
+    padding: 0 1rem;
+  }
+
+  .vulnerability-table {
+    min-width: 600px;
+  }
+
+  .vulnerability-table th,
+  .vulnerability-table td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.8125rem;
+  }
+
+  .vulnerability-table th {
+    font-size: 0.75rem;
+  }
+
+  /* CVE Code */
+  .cve-code {
+    font-size: 0.75rem;
+  }
+
+  /* Severity badges - smaller on mobile */
+  .severity-badge,
+  .status-badge {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  /* Compliance List */
+  .compliance-list {
+    padding: 0.5rem;
+  }
+
+  .compliance-item {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .compliance-info strong {
+    font-size: 0.875rem;
+  }
+
+  .compliance-meta {
+    font-size: 0.8125rem;
+  }
+
+  /* Component Stats */
+  .component-stats {
+    padding: 0.75rem;
+  }
+
+  .stat-row {
+    padding: 0.5rem 0;
+  }
+
+  .stat-row span {
+    font-size: 0.8125rem;
+  }
+
+  .stat-row strong {
+    font-size: 1rem;
+  }
+
+  /* Interactive Section / Tools Grid */
+  .tools-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .tool-card {
+    padding: 1rem;
+  }
+
+  .tool-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .tool-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .tool-card h3 {
+    font-size: 1rem;
+  }
+
+  .tool-card p {
+    font-size: 0.875rem;
+  }
+
+  .tool-card small {
+    font-size: 0.75rem;
+  }
+
+  .upload-btn,
+  .action-btn {
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 1.125rem;
+  }
+
+  .analytics-card,
+  .report-card {
+    padding: 0.875rem;
+    border-radius: 8px;
+  }
+
+  .card-header h3 {
+    font-size: 1rem;
+  }
+
+  .badge {
+    padding: 0.1875rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  /* Very small tables on tiny screens */
+  .vulnerability-table th,
+  .vulnerability-table td {
+    padding: 0.625rem 0.375rem;
+    font-size: 0.75rem;
+  }
+
+  .table-container {
+    margin: 0 -0.875rem;
+    padding: 0 0.875rem;
+  }
+
+  /* Tool cards even more compact */
+  .tool-card {
+    padding: 0.875rem;
+  }
+
+  .tool-card h3 {
+    font-size: 0.9375rem;
+  }
+
+  .subscription-badge,
+  .plan-info,
+  .user-count-badge {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+}
+

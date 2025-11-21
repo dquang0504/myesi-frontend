@@ -1,10 +1,14 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import ErrorBoundary from './components/ErrorBoundary';
 import PrivateRoute from './components/PrivateRoute';
 import Login from './pages/Login';
 import Unauthorized from './pages/Unauthorized';
 import AdminDashboard from './pages/Admin/Dashboard';
 import UserManagement from './pages/Admin/UserManagement';
 import AdminReports from './pages/Admin/Reports';
+import AuditLogs from './pages/Admin/AuditLogs';
+import SubscriptionStatus from './pages/Admin/SubscriptionStatus';
+import Notifications from './pages/Admin/Notifications';
 import DeveloperDashboard from './pages/Developer/Dashboard';
 import DeveloperReports from './pages/Developer/Reports';
 import AnalystDashboard from './pages/Analyst/Dashboard';
@@ -13,19 +17,20 @@ import AuditorDashboard from './pages/Auditor/Dashboard';
 import AuditReports from './pages/Auditor/AuditReports';
 import AuditorCompliance from './pages/Auditor/Compliance';
 import SystemLogs from './pages/Auditor/SystemLogs';
-import SubscriptionPage from './pages/SubscriptionPage';
-import BillingStatus from './pages/BillingStatus';
+import BillingPortal from './pages/BillingPortal';
 import './App.css';
+import './components/ErrorBoundary.css';
 
 export const apiURL = "https://localhost:8000/api"
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
-        <Route path="/login" element={<Login />} />
+    <ErrorBoundary>
+      <BrowserRouter>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<Login />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
 
         {/* Admin Routes */}
@@ -46,6 +51,22 @@ export default function App() {
           }
         />
         <Route
+          path="/admin/audit-logs"
+          element={
+            <PrivateRoute requiredRole="admin">
+              <AuditLogs />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/admin/subscription-status"
+          element={
+            <PrivateRoute requiredRole="admin">
+              <SubscriptionStatus />
+            </PrivateRoute>
+          }
+        />
+        <Route
           path="/admin/reports"
           element={
             <PrivateRoute requiredRole="admin">
@@ -54,10 +75,10 @@ export default function App() {
           }
         />
         <Route
-          path="/admin/subscription"
+          path="/admin/notifications"
           element={
             <PrivateRoute requiredRole="admin">
-              <SubscriptionPage />
+              <Notifications />
             </PrivateRoute>
           }
         />
@@ -65,7 +86,7 @@ export default function App() {
           path="/admin/billing"
           element={
             <PrivateRoute requiredRole="admin">
-              <BillingStatus />
+              <BillingPortal />
             </PrivateRoute>
           }
         />
@@ -88,18 +109,10 @@ export default function App() {
           }
         />
         <Route
-          path="/developer/subscription"
-          element={
-            <PrivateRoute requiredRole="developer">
-              <SubscriptionPage />
-            </PrivateRoute>
-          }
-        />
-        <Route
           path="/developer/billing"
           element={
             <PrivateRoute requiredRole="developer">
-              <BillingStatus />
+              <BillingPortal />
             </PrivateRoute>
           }
         />
@@ -122,18 +135,10 @@ export default function App() {
           }
         />
         <Route
-          path="/analyst/subscription"
-          element={
-            <PrivateRoute requiredRole="analyst">
-              <SubscriptionPage />
-            </PrivateRoute>
-          }
-        />
-        <Route
           path="/analyst/billing"
           element={
             <PrivateRoute requiredRole="analyst">
-              <BillingStatus />
+              <BillingPortal />
             </PrivateRoute>
           }
         />
@@ -172,18 +177,10 @@ export default function App() {
           }
         />
         <Route
-          path="/auditor/subscription"
-          element={
-            <PrivateRoute requiredRole="auditor">
-              <SubscriptionPage />
-            </PrivateRoute>
-          }
-        />
-        <Route
           path="/auditor/billing"
           element={
             <PrivateRoute requiredRole="auditor">
-              <BillingStatus />
+              <BillingPortal />
             </PrivateRoute>
           }
         />
@@ -192,5 +189,6 @@ export default function App() {
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
+    </ErrorBoundary>
   );
 }

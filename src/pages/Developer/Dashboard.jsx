@@ -8,6 +8,7 @@ import {
   AreaChartComponent,
 } from '../../components/ChartComponent';
 import HeatmapComponent from '../../components/HeatmapComponent';
+import RiskByProjectChart from '../../components/RiskByProjectChart';
 import {
   useDashboardStats,
   useRecentActivities,
@@ -186,6 +187,25 @@ export default function DeveloperDashboard() {
                 />
               )}
             </div>
+
+              {/* Risk by Project (severity breakdown) */}
+              <div className="analytics-card">
+                <div className="card-header">
+                  <h3>Risk by Project (Severity)</h3>
+                </div>
+                {riskLoading ? (
+                  <div className="chart-loading">
+                    <div className="spinner-large"></div>
+                  </div>
+                ) : (
+                  <RiskByProjectChart
+                    projects={riskScores.riskByProject || []}
+                    distribution={riskScores.distribution || []}
+                    xKey="project"
+                    height={280}
+                  />
+                )}
+              </div>
 
             {/* Dependency Scan Activity */}
             <div className="analytics-card">
