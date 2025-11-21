@@ -22,6 +22,11 @@ export const useSubscriptionPlans = () => {
 };
 
 /**
+ * Alias for useSubscriptionPlans (for convenience)
+ */
+export const usePlans = useSubscriptionPlans;
+
+/**
  * Fetch current subscription
  */
 export const useCurrentSubscription = () => {

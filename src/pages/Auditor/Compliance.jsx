@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AdminLayout from '../../components/AdminLayout';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { reportService } from '../../services/reportService';
 import './Compliance.css';
 
 export default function AuditorCompliance() {
+  const [isDownloading, setIsDownloading] = useState(false);
   const frameworks = [
     { name: 'ISO 27001', score: 92, status: 'Compliant', controls: 114, passed: 105, failed: 9 },
     { name: 'SOC 2', score: 88, status: 'Compliant', controls: 64, passed: 56, failed: 8 },
@@ -31,6 +33,22 @@ export default function AuditorCompliance() {
   const totalControls = 449 + 54;
   const compliancePercentage = Math.round((449 / totalControls) * 100);
 
+  const handleDownloadReport = async (format = 'pdf') => {
+    setIsDownloading(true);
+    try {
+      const response = await reportService.downloadComplianceReport(format);
+      if (response.data.success) {
+        reportService.triggerDownload(response.data.blob, response.data.filename);
+        alert(`Compliance report downloaded successfully as ${format.toUpperCase()}`);
+      }
+    } catch (error) {
+      console.error('Error downloading report:', error);
+      alert(`Failed to download compliance report. Error: ${error.message}`);
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
   return (
     <AdminLayout>
       <div className="compliance-page">
@@ -40,11 +58,15 @@ export default function AuditorCompliance() {
             <h1>Compliance Overview</h1>
             <p>Read-only view of compliance status across frameworks</p>
           </div>
-          <button className="btn btn-outline">
+          <button 
+            className="btn btn-outline" 
+            onClick={() => handleDownloadReport('pdf')}
+            disabled={isDownloading}
+          >
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" style={{ width: '16px', height: '16px' }}>
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
-            Export Compliance Report
+            {isDownloading ? 'Downloading...' : 'Download PDF Report'}
           </button>
         </div>
 

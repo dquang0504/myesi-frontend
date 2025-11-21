@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import NotificationCenter from "./NotificationCenter";
 import "./Navbar.css";
 
 function Navbar() {
@@ -58,7 +59,7 @@ function Navbar() {
       {/* === Right Section: Role Actions + Icons === */}
       <div className="right-section">
         {role && roleActions[role]}
-        <span className="icon">🔔</span>
+        <NotificationCenter />
         <span className="icon">⚙️</span>
       </div>
     </div>

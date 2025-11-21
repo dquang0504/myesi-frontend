@@ -69,11 +69,47 @@ export default function AdminSidebar() {
           )
         },
         {
+          path: '/admin/audit-logs',
+          label: 'Audit Logs',
+          icon: (
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          )
+        },
+        {
+          path: '/admin/subscription-status',
+          label: 'Customer Subscriptions',
+          icon: (
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          )
+        },
+        {
           path: '/admin/reports',
           label: 'Reports',
           icon: (
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          )
+        },
+        {
+          path: '/admin/notifications',
+          label: 'Notifications',
+          icon: (
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+          )
+        },
+        {
+          path: '/admin/billing',
+          label: 'Billing',
+          icon: (
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
             </svg>
           )
         }
@@ -110,20 +146,11 @@ export default function AdminSidebar() {
           )
         },
         {
-          path: '/auditor/subscription',
-          label: 'Subscription',
-          icon: (
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h18M3 12h18M3 17h18" />
-            </svg>
-          )
-        },
-        {
           path: '/auditor/billing',
           label: 'Billing',
           icon: (
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
             </svg>
           )
         }
@@ -142,20 +169,11 @@ export default function AdminSidebar() {
           )
         },
         {
-          path: `${getRoleBasePath()}/subscription`,
-          label: 'Subscription',
-          icon: (
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h18M3 12h18M3 17h18" />
-            </svg>
-          )
-        },
-        {
           path: `${getRoleBasePath()}/billing`,
           label: 'Billing',
           icon: (
             <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
             </svg>
           )
         }
@@ -188,15 +206,21 @@ export default function AdminSidebar() {
         <div
           className="sidebar-overlay show"
           onClick={closeMobileMenu}
+          role="presentation"
+          aria-hidden="true"
         ></div>
       )}
 
       {/* Sidebar */}
-      <aside className={`admin-sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
+      <aside 
+        className={`admin-sidebar ${isMobileMenuOpen ? 'open' : ''}`}
+        role="navigation"
+        aria-label="Main navigation"
+      >
         {/* Header */}
         <div className="sidebar-header">
           <div className="sidebar-branding">
-            <div className="brand-icon">
+            <div className="brand-icon" aria-hidden="true">
               <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
               </svg>
@@ -209,16 +233,18 @@ export default function AdminSidebar() {
         </div>
 
         {/* Navigation */}
-        <nav className="sidebar-nav">
-          <ul className="nav-menu">
+        <nav className="sidebar-nav" aria-label="Primary">
+          <ul className="nav-menu" role="list">
             {getMenuItems().map((item, index) => (
-              <li key={index} className="nav-item">
+              <li key={index} className="nav-item" role="listitem">
                 <Link
                   to={item.path}
                   className={`nav-link ${isActive(item.path) ? 'active' : ''}`}
                   onClick={closeMobileMenu}
+                  aria-label={item.label}
+                  aria-current={isActive(item.path) ? 'page' : undefined}
                 >
-                  <span className="nav-icon">{item.icon}</span>
+                  <span className="nav-icon" aria-hidden="true">{item.icon}</span>
                   <span className="nav-text">{item.label}</span>
                 </Link>
               </li>
@@ -232,7 +258,11 @@ export default function AdminSidebar() {
         {/* Footer */}
         <div className="sidebar-footer">
           <div className="footer-user">
-            <div className="user-avatar">
+            <div 
+              className="user-avatar"
+              aria-label={`User avatar for ${user?.name || getRoleTitle()}`}
+              role="img"
+            >
               {user?.name?.charAt(0).toUpperCase() || userRole.charAt(0).toUpperCase()}
             </div>
             <div className="user-info">
@@ -240,8 +270,13 @@ export default function AdminSidebar() {
               <div className="user-role">{getRoleTitle()}</div>
             </div>
           </div>
-          <button onClick={handleLogout} className="logout-btn">
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <button 
+            onClick={handleLogout} 
+            className="logout-btn"
+            aria-label="Logout from account"
+            title="Logout"
+          >
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
