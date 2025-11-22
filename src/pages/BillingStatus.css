@@ -4,8 +4,6 @@
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  background: var(--bg-secondary);
-  transition: background-color 0.1s ease;
 }
 
 .billing-header {
@@ -55,7 +53,7 @@
   border-radius: 12px;
   box-shadow: var(--card-shadow);
   border: 1px solid var(--border-color);
-  transition: background-color 0.1s ease;
+  transition: none;
 }
 
 .no-sub-icon {
@@ -85,7 +83,7 @@
   margin-bottom: 2rem;
   box-shadow: var(--card-shadow);
   border: 1px solid var(--border-color);
-  transition: background-color 0.1s ease;
+  transition: none;
 }
 
 .section-header {

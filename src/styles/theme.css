@@ -444,14 +444,7 @@ pre,
   box-shadow: var(--card-shadow-hover) !important;
 }
 
-/* Smooth transitions for theme changes */
-*,
-*::before,
-*::after {
-  transition-property: background-color, border-color, color, fill, stroke;
-  transition-duration: 0.3s;
-  transition-timing-function: ease;
-}
+/* Instant theme changes - no transitions to prevent layering */
 
 /* Prevent transition on page load */
 .no-transition * {

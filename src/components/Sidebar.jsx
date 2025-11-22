@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import logo from "../assets/logo.svg";
-import "./Sidebar.css";
+import "../styles/sidebar.css";
 import sidebarMenus from "../config/sidebarMenu"; // centralized menu config
 
 function Sidebar() {

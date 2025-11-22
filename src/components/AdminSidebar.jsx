@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ThemeToggle from './ThemeToggle';
 import logo from '../assets/logo.svg';
-import './AdminSidebar.css';
+import '../styles/sidebar.css';
 
 export default function AdminSidebar() {
   const location = useLocation();

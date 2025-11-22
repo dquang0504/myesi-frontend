@@ -55,18 +55,18 @@
 
 [data-theme='dark'] .theme-toggle-thumb {
   transform: translateX(24px);
-  background: #1e293b;
+  background: var(--sidebar-bg);
 }
 
 .theme-icon {
   width: 14px;
   height: 14px;
-  color: #f59e0b;
+  color: var(--warning);
   transition: all 0.1s ease;
 }
 
 [data-theme='dark'] .theme-icon {
-  color: #fbbf24;
+  color: var(--warning);
 }
 
 .sun-icon {

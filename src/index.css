@@ -55,10 +55,10 @@
   --info-bg: rgba(59, 130, 246, 0.1);
   
   /* Component Specific */
-  --sidebar-bg: #1e293b;
-  --sidebar-text: #e2e8f0;
-  --sidebar-hover: rgba(255, 255, 255, 0.1);
-  --sidebar-active: rgba(102, 126, 234, 0.2);
+  --sidebar-bg: #ffffff;
+  --sidebar-text: #1e293b;
+  --sidebar-hover: rgba(102, 126, 234, 0.08);
+  --sidebar-active: rgba(102, 126, 234, 0.15);
   
   --card-bg: #ffffff;
   --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -159,7 +159,6 @@ body {
   min-height: 100vh;
   background-color: var(--bg-secondary);
   color: var(--text-primary);
-  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 #root {
