@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import NotificationCenter from "./NotificationCenter";
-import "./Navbar.css";
+import "../styles/navbar.css";
 
 function Navbar() {
   const [role, setRole] = useState("");

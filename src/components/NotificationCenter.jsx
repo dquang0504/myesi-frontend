@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNotifications, useUnreadCount, useMarkAsRead, useMarkAllAsRead, useDeleteNotification } from '../hooks/useNotifications';
 import { useNavigate } from 'react-router-dom';
-import './NotificationCenter.css';
+import '../styles/notification.css';
 
 const NotificationCenter = () => {
   const [isOpen, setIsOpen] = useState(false);

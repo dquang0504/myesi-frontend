@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useAuth } from "../context/AuthContext";
+import logo from "../assets/logo.svg";
 import "./Login.css";
 
 // Validation schema
@@ -76,26 +77,7 @@ const Login = () => {
                 <div className="login-header">
                   <div className="logo-container">
                     <div className="logo-icon">
-                      <svg
-                        width="32"
-                        height="32"
-                        viewBox="0 0 32 32"
-                        fill="none"
-                      >
-                        <circle
-                          cx="16"
-                          cy="16"
-                          r="14"
-                          stroke="#3b82f6"
-                          strokeWidth="2"
-                        />
-                        <path
-                          d="M16 8V16L20 20"
-                          stroke="#3b82f6"
-                          strokeWidth="2"
-                          strokeLinecap="round"
-                        />
-                      </svg>
+                      <img src={logo} alt="MyESI Logo" />
                     </div>
                     <div>
                       <h1>MyESI</h1>

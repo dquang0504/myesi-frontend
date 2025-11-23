@@ -1,0 +1,452 @@
+/* Global Theme Overrides for All Components */
+
+/* Cards */
+.card,
+.stats-card,
+.metric-card,
+.stat-card,
+.plan-card,
+.notification-card,
+.invoice-card,
+.subscription-card,
+.current-subscription-card {
+  background: var(--card-bg) !important;
+  box-shadow: var(--card-shadow) !important;
+  transition: all 0.1s ease !important;
+}
+
+.card:hover,
+.stats-card:hover,
+.plan-card:hover,
+.notification-card:hover {
+  box-shadow: var(--card-shadow-hover) !important;
+}
+
+/* Headers and Titles */
+h1, h2, h3, h4, h5, h6,
+.dashboard-header h1,
+.page-header h1,
+.section-header h2,
+.card-title,
+.stat-title {
+  color: var(--text-primary) !important;
+}
+
+/* Secondary Text */
+p,
+.description,
+.stat-meta,
+.card-description,
+.subtitle {
+  color: var(--text-secondary) !important;
+}
+
+/* Backgrounds */
+.admin-dashboard,
+.dashboard-page,
+.reports-page,
+.notifications-page,
+.billing-portal,
+.user-management-page {
+  background: var(--bg-secondary) !important;
+}
+
+.dashboard-header,
+.page-header,
+.section-container,
+.filter-bar,
+.settings-panel {
+  background: var(--card-bg) !important;
+}
+
+/* Borders */
+.dashboard-header,
+.stat-card,
+.card,
+.filter-bar,
+.table,
+.input,
+.select,
+.notification-item {
+  border-color: var(--border-color) !important;
+}
+
+/* Inputs and Forms */
+input,
+textarea,
+select,
+.search-input,
+.form-control {
+  background: var(--input-bg) !important;
+  border-color: var(--input-border) !important;
+  color: var(--text-primary) !important;
+  transition: all 0.1s ease !important;
+}
+
+input:focus,
+textarea:focus,
+select:focus,
+.search-input:focus {
+  border-color: var(--input-focus-border) !important;
+  outline: none !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-tertiary) !important;
+}
+
+/* Buttons */
+.btn-primary,
+.action-btn,
+.primary-button {
+  background: var(--brand-gradient) !important;
+  border: none !important;
+}
+
+.btn-outline,
+.btn-secondary {
+  background: transparent !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.btn-outline:hover,
+.btn-secondary:hover {
+  background: var(--bg-hover) !important;
+  border-color: var(--brand-primary) !important;
+  color: var(--brand-primary) !important;
+}
+
+/* Tables */
+table,
+.table,
+.data-table {
+  background: var(--card-bg) !important;
+}
+
+thead,
+.table-header {
+  background: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+}
+
+tbody tr,
+.table-row {
+  border-bottom-color: var(--border-color) !important;
+}
+
+tbody tr:hover,
+.table-row:hover {
+  background: var(--bg-hover) !important;
+}
+
+th,
+.table-header-cell {
+  color: var(--text-primary) !important;
+  font-weight: 600 !important;
+}
+
+td,
+.table-cell {
+  color: var(--text-secondary) !important;
+}
+
+/* Status Badges */
+.status-active,
+.badge-success {
+  background: var(--success-bg) !important;
+  color: var(--success) !important;
+}
+
+.status-warning,
+.badge-warning {
+  background: var(--warning-bg) !important;
+  color: var(--warning) !important;
+}
+
+.status-error,
+.status-canceled,
+.badge-error {
+  background: var(--error-bg) !important;
+  color: var(--error) !important;
+}
+
+.status-info,
+.badge-info {
+  background: var(--info-bg) !important;
+  color: var(--info) !important;
+}
+
+/* Modals */
+.modal,
+.modal-content,
+.modal-body {
+  background: var(--card-bg) !important;
+  color: var(--text-primary) !important;
+}
+
+.modal-header {
+  border-bottom-color: var(--border-color) !important;
+}
+
+.modal-footer {
+  border-top-color: var(--border-color) !important;
+}
+
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme='dark'] .modal-overlay {
+  background: rgba(0, 0, 0, 0.7) !important;
+}
+
+/* Dropdowns */
+.dropdown,
+.dropdown-menu,
+.select-menu {
+  background: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--card-shadow-hover) !important;
+}
+
+.dropdown-item,
+.menu-item {
+  color: var(--text-primary) !important;
+}
+
+.dropdown-item:hover,
+.menu-item:hover {
+  background: var(--bg-hover) !important;
+}
+
+/* Charts */
+.recharts-text,
+.chart-label {
+  fill: var(--chart-text) !important;
+}
+
+.recharts-cartesian-grid line {
+  stroke: var(--chart-grid) !important;
+}
+
+/* Loading States */
+.spinner,
+.loading-spinner {
+  border-color: var(--border-color) !important;
+  border-top-color: var(--brand-primary) !important;
+}
+
+/* Empty States */
+.empty-state,
+.no-data {
+  color: var(--text-tertiary) !important;
+}
+
+.empty-state svg {
+  color: var(--border-color) !important;
+}
+
+/* Scrollbars - Webkit */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* Firefox Scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-color) var(--bg-tertiary);
+}
+
+/* Tooltips */
+.tooltip,
+.tooltip-content {
+  background: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: var(--card-shadow-hover) !important;
+}
+
+/* Links */
+a {
+  color: var(--brand-primary) !important;
+}
+
+a:hover {
+  color: var(--brand-secondary) !important;
+}
+
+/* Dividers */
+hr,
+.divider {
+  border-color: var(--border-color) !important;
+}
+
+/* Code Blocks */
+code,
+pre,
+.code-block {
+  background: var(--bg-tertiary) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Specific Component Overrides */
+
+/* Navbar */
+.topbar,
+.navbar {
+  background: var(--card-bg) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+.greeting,
+.navbar-title {
+  color: var(--text-primary) !important;
+}
+
+/* Stats/Metrics */
+.metric-value,
+.stat-value,
+.stat-number {
+  color: var(--text-primary) !important;
+}
+
+.metric-label,
+.stat-label {
+  color: var(--text-secondary) !important;
+}
+
+.metric-change-positive {
+  color: var(--success) !important;
+}
+
+.metric-change-negative {
+  color: var(--error) !important;
+}
+
+/* Tabs */
+.tabs,
+.tab-list {
+  border-bottom-color: var(--border-color) !important;
+}
+
+.tab {
+  color: var(--text-secondary) !important;
+}
+
+.tab:hover {
+  color: var(--text-primary) !important;
+  background: var(--bg-hover) !important;
+}
+
+.tab.active {
+  color: var(--brand-primary) !important;
+  border-bottom-color: var(--brand-primary) !important;
+}
+
+/* Pagination */
+.pagination-btn {
+  background: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: var(--bg-hover) !important;
+  border-color: var(--brand-primary) !important;
+}
+
+.pagination-btn.active {
+  background: var(--brand-gradient) !important;
+  color: white !important;
+}
+
+/* Accordions */
+.accordion-header {
+  background: var(--card-bg) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+.accordion-header:hover {
+  background: var(--bg-hover) !important;
+}
+
+.accordion-content {
+  background: var(--bg-secondary) !important;
+  color: var(--text-secondary) !important;
+}
+
+/* Breadcrumbs */
+.breadcrumb {
+  color: var(--text-tertiary) !important;
+}
+
+.breadcrumb-link {
+  color: var(--brand-primary) !important;
+}
+
+.breadcrumb-separator {
+  color: var(--text-tertiary) !important;
+}
+
+/* Progress Bars */
+.progress-bar {
+  background: var(--bg-tertiary) !important;
+}
+
+.progress-fill {
+  background: var(--brand-gradient) !important;
+}
+
+/* Alerts */
+.alert {
+  background: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.alert-success {
+  background: var(--success-bg) !important;
+  color: var(--success) !important;
+}
+
+.alert-warning {
+  background: var(--warning-bg) !important;
+  color: var(--warning) !important;
+}
+
+.alert-error {
+  background: var(--error-bg) !important;
+  color: var(--error) !important;
+}
+
+/* Popovers */
+.popover {
+  background: var(--card-bg) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: var(--card-shadow-hover) !important;
+}
+
+/* Instant theme changes - no transitions to prevent layering */
+
+/* Prevent transition on page load */
+.no-transition * {
+  transition: none !important;
+}

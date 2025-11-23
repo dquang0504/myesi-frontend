@@ -16,7 +16,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from 'recharts';
-import './ChartComponent.css';
+import '../styles/chart.css';
 
 /**
  * Reusable Chart Component with multiple chart types

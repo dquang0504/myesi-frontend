@@ -1,16 +1,16 @@
 /* Chart Component Styles */
 
 .chart-tooltip {
-  background: white;
+  background: var(--card-bg);
   padding: 0.75rem 1rem;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border: 1px solid #e2e8f0;
+  box-shadow: var(--card-shadow-hover);
+  border: 1px solid var(--border-color);
 }
 
 .chart-tooltip .label {
   font-weight: 600;
-  color: #1e293b;
+  color: var(--text-primary);
   margin: 0 0 0.5rem 0;
   font-size: 0.875rem;
 }
@@ -19,6 +19,7 @@
   margin: 0.25rem 0;
   font-size: 0.875rem;
   font-weight: 500;
+  color: var(--text-secondary);
 }
 
 /* Chart Container */
@@ -28,7 +29,7 @@
 
 .recharts-cartesian-axis-tick {
   font-size: 0.875rem;
-  fill: #64748b;
+  fill: var(--chart-text);
 }
 
 .recharts-legend-wrapper {

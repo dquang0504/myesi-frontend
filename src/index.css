@@ -1,3 +1,6 @@
+/* Import theme styles */
+@import './styles/theme.css';
+
 :root {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -5,98 +8,131 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light;
-  
-  /* Color Tokens - Light Mode */
-  --color-primary: #667eea;
-  --color-primary-dark: #764ba2;
-  --color-secondary: #3b82f6;
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
-  --color-info: #3b82f6;
-  
-  /* Background Colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
-  --bg-elevated: #ffffff;
-  
-  /* Text Colors */
-  --text-primary: #1e293b;
-  --text-secondary: #475569;
-  --text-tertiary: #64748b;
-  --text-muted: #94a3b8;
-  --text-inverse: #ffffff;
-  
-  /* Border Colors */
-  --border-primary: #e2e8f0;
-  --border-secondary: #cbd5e1;
-  --border-focus: #667eea;
-  
-  /* Shadow */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
-  
-  /* Spacing Scale */
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2rem;
-  --space-2xl: 3rem;
-  
-  /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-full: 9999px;
-  
-  /* Typography */
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
-  --font-size-3xl: 2rem;
-
-  color: var(--text-primary);
-  background-color: var(--bg-primary);
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Dark Mode Color Tokens */
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-    
-    --bg-primary: #0f172a;
-    --bg-secondary: #1e293b;
-    --bg-tertiary: #334155;
-    --bg-elevated: #1e293b;
-    
-    --text-primary: #f1f5f9;
-    --text-secondary: #cbd5e1;
-    --text-tertiary: #94a3b8;
-    --text-muted: #64748b;
-    --text-inverse: #1e293b;
-    
-    --border-primary: #334155;
-    --border-secondary: #475569;
-    
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.6);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.7);
-    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.8);
-  }
+/* Light Theme (Default) */
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+  
+  /* Background Colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --bg-hover: rgba(102, 126, 234, 0.05);
+  --bg-active: rgba(102, 126, 234, 0.1);
+  
+  /* Text Colors */
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-tertiary: #94a3b8;
+  --text-inverse: #ffffff;
+  
+  /* Border Colors */
+  --border-color: #e2e8f0;
+  --border-color-light: #f1f5f9;
+  --border-color-dark: #cbd5e1;
+  
+  /* Brand Colors */
+  --brand-primary: #667eea;
+  --brand-secondary: #764ba2;
+  --brand-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  
+  /* Status Colors */
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --info: #3b82f6;
+  
+  /* Status Backgrounds */
+  --success-bg: rgba(16, 185, 129, 0.1);
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  --error-bg: rgba(239, 68, 68, 0.1);
+  --info-bg: rgba(59, 130, 246, 0.1);
+  
+  /* Component Specific */
+  --sidebar-bg: #ffffff;
+  --sidebar-text: #1e293b;
+  --sidebar-hover: rgba(102, 126, 234, 0.08);
+  --sidebar-active: rgba(102, 126, 234, 0.15);
+  
+  --card-bg: #ffffff;
+  --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
+  
+  --input-bg: #ffffff;
+  --input-border: #e2e8f0;
+  --input-focus-border: #667eea;
+  
+  --toggle-bg: #cbd5e1;
+  
+  /* Chart Colors */
+  --chart-grid: #e2e8f0;
+  --chart-text: #64748b;
+}
+
+/* Dark Theme */
+[data-theme='dark'] {
+  color-scheme: dark;
+  
+  /* Background Colors */
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  --bg-hover: rgba(102, 126, 234, 0.15);
+  --bg-active: rgba(102, 126, 234, 0.25);
+  
+  /* Text Colors */
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  --text-inverse: #0f172a;
+  
+  /* Border Colors */
+  --border-color: #334155;
+  --border-color-light: #475569;
+  --border-color-dark: #1e293b;
+  
+  /* Brand Colors - slightly adjusted for dark mode */
+  --brand-primary: #818cf8;
+  --brand-secondary: #a78bfa;
+  --brand-gradient: linear-gradient(135deg, #818cf8 0%, #a78bfa 100%);
+  
+  /* Status Colors - slightly brighter for dark mode */
+  --success: #34d399;
+  --warning: #fbbf24;
+  --error: #f87171;
+  --info: #60a5fa;
+  
+  /* Status Backgrounds */
+  --success-bg: rgba(52, 211, 153, 0.15);
+  --warning-bg: rgba(251, 191, 36, 0.15);
+  --error-bg: rgba(248, 113, 113, 0.15);
+  --info-bg: rgba(96, 165, 250, 0.15);
+  
+  /* Component Specific */
+  --sidebar-bg: #0a0f1e;
+  --sidebar-text: #e2e8f0;
+  --sidebar-hover: rgba(255, 255, 255, 0.05);
+  --sidebar-active: rgba(129, 140, 248, 0.2);
+  
+  --card-bg: #1e293b;
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --card-shadow-hover: 0 8px 16px rgba(0, 0, 0, 0.4);
+  
+  --input-bg: #0f172a;
+  --input-border: #334155;
+  --input-focus-border: #818cf8;
+  
+  --toggle-bg: #475569;
+  
+  /* Chart Colors */
+  --chart-grid: #334155;
+  --chart-text: #94a3b8;
 }
 
 * {
@@ -105,32 +141,15 @@
   padding: 0;
 }
 
-/* Smooth scroll behavior (respects prefers-reduced-motion) */
-html {
-  scroll-behavior: smooth;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-}
-
 a {
   font-weight: 500;
-  color: var(--color-secondary);
+  color: var(--brand-primary);
   text-decoration: none;
-  transition: color 0.2s;
+  transition: color 0.2s ease;
 }
 
 a:hover {
-  color: var(--color-primary);
-}
-
-a:focus-visible {
-  outline: 3px solid var(--border-focus);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
+  color: var(--brand-secondary);
 }
 
 body {
@@ -140,7 +159,6 @@ body {
   min-height: 100vh;
   background-color: var(--bg-secondary);
   color: var(--text-primary);
-  transition: background-color 0.3s, color 0.3s;
 }
 
 #root {

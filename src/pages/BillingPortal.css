@@ -387,7 +387,7 @@
 }
 
 .invoices-table tbody tr {
-  transition: background-color 0.15s;
+  transition: none;
 }
 
 .invoices-table tbody tr:hover {
