@@ -1,5 +1,5 @@
 import React from 'react';
-import './HeatmapComponent.css';
+import '../styles/heatmap.css';
 
 /**
  * HeatmapComponent - A flexible heatmap visualization component

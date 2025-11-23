@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import ErrorBoundary from './components/ErrorBoundary';
 import PrivateRoute from './components/PrivateRoute';
 import Login from './pages/Login';
 import Unauthorized from './pages/Unauthorized';
@@ -19,18 +18,16 @@ import AuditorCompliance from './pages/Auditor/Compliance';
 import SystemLogs from './pages/Auditor/SystemLogs';
 import BillingPortal from './pages/BillingPortal';
 import './App.css';
-import './components/ErrorBoundary.css';
 
 export const apiURL = "https://localhost:8000/api"
 
 export default function App() {
   return (
-    <ErrorBoundary>
-      <BrowserRouter>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<Login />} />
+    <BrowserRouter>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/unauthorized" element={<Unauthorized />} />
 
         {/* Admin Routes */}
@@ -189,6 +186,5 @@ export default function App() {
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
-    </ErrorBoundary>
   );
 }

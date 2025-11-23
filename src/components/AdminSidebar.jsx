@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import './AdminSidebar.css';
+import ThemeToggle from './ThemeToggle';
+import logo from '../assets/logo.svg';
+import '../styles/sidebar.css';
 
 export default function AdminSidebar() {
   const location = useLocation();
@@ -206,24 +208,16 @@ export default function AdminSidebar() {
         <div
           className="sidebar-overlay show"
           onClick={closeMobileMenu}
-          role="presentation"
-          aria-hidden="true"
         ></div>
       )}
 
       {/* Sidebar */}
-      <aside 
-        className={`admin-sidebar ${isMobileMenuOpen ? 'open' : ''}`}
-        role="navigation"
-        aria-label="Main navigation"
-      >
+      <aside className={`admin-sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
         {/* Header */}
         <div className="sidebar-header">
           <div className="sidebar-branding">
-            <div className="brand-icon" aria-hidden="true">
-              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
+            <div className="brand-icon">
+              <img src={logo} alt="MyESI Logo" />
             </div>
             <div className="brand-text">
               <h2>MyESI</h2>
@@ -233,18 +227,16 @@ export default function AdminSidebar() {
         </div>
 
         {/* Navigation */}
-        <nav className="sidebar-nav" aria-label="Primary">
-          <ul className="nav-menu" role="list">
+        <nav className="sidebar-nav">
+          <ul className="nav-menu">
             {getMenuItems().map((item, index) => (
-              <li key={index} className="nav-item" role="listitem">
+              <li key={index} className="nav-item">
                 <Link
                   to={item.path}
                   className={`nav-link ${isActive(item.path) ? 'active' : ''}`}
                   onClick={closeMobileMenu}
-                  aria-label={item.label}
-                  aria-current={isActive(item.path) ? 'page' : undefined}
                 >
-                  <span className="nav-icon" aria-hidden="true">{item.icon}</span>
+                  <span className="nav-icon">{item.icon}</span>
                   <span className="nav-text">{item.label}</span>
                 </Link>
               </li>
@@ -255,14 +247,13 @@ export default function AdminSidebar() {
         {/* Spacer to push footer to bottom */}
         <div className="sidebar-spacer"></div>
 
+        {/* Theme Toggle */}
+        <ThemeToggle />
+
         {/* Footer */}
         <div className="sidebar-footer">
           <div className="footer-user">
-            <div 
-              className="user-avatar"
-              aria-label={`User avatar for ${user?.name || getRoleTitle()}`}
-              role="img"
-            >
+            <div className="user-avatar">
               {user?.name?.charAt(0).toUpperCase() || userRole.charAt(0).toUpperCase()}
             </div>
             <div className="user-info">
@@ -270,13 +261,8 @@ export default function AdminSidebar() {
               <div className="user-role">{getRoleTitle()}</div>
             </div>
           </div>
-          <button 
-            onClick={handleLogout} 
-            className="logout-btn"
-            aria-label="Logout from account"
-            title="Logout"
-          >
-            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <button onClick={handleLogout} className="logout-btn">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"

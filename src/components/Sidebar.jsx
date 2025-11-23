@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
-import "./Sidebar.css";
+import logo from "../assets/logo.svg";
+import "../styles/sidebar.css";
 import sidebarMenus from "../config/sidebarMenu"; // centralized menu config
 
 function Sidebar() {
@@ -36,8 +37,13 @@ function Sidebar() {
       {/* === Logo Section === */}
       <div>
         <div className="logo">
-          <h2>MyESI</h2>
-          <p>Security Platform</p>
+          <div className="logo-icon">
+            <img src={logo} alt="MyESI Logo" />
+          </div>
+          <div className="logo-text">
+            <h2>MyESI</h2>
+            <p>Security Platform</p>
+          </div>
         </div>
 
         {/* === Dynamic Nav Menu === */}

@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from 'recharts';
-import './ChartComponent.css';
+import '../styles/chart.css';
 
 const DEFAULT_COLORS = {
   critical: '#ef4444',

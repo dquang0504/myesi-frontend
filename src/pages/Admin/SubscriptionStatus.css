@@ -255,7 +255,7 @@
 }
 
 .subscriptions-table tbody tr {
-  transition: background-color 0.15s;
+  transition: none;
 }
 
 .subscriptions-table tbody tr:hover {

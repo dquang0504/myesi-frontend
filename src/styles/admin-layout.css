@@ -1,7 +1,8 @@
+/* Admin Layout Styles */
+
 .admin-layout {
   display: flex;
   min-height: 100vh;
-  background: #f8fafc;
 }
 
 .admin-main-content {
@@ -35,4 +36,3 @@
     padding-top: 3.5rem;
   }
 }
-

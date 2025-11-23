@@ -13,18 +13,18 @@
   align-items: flex-start;
   margin-bottom: 2rem;
   padding-bottom: 1.5rem;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .header-content h1 {
   font-size: 2rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-primary);
   margin-bottom: 0.5rem;
 }
 
 .header-content p {
-  color: #64748b;
+  color: var(--text-secondary);
   font-size: 1rem;
 }
 
@@ -43,27 +43,27 @@
 .report-type-selector label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #475569;
+  color: var(--text-secondary);
 }
 
 .report-type-selector select {
   padding: 0.5rem 1rem;
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--border-color);
   border-radius: 8px;
   font-size: 0.875rem;
-  color: #1e293b;
-  background-color: white;
+  color: var(--text-primary);
+  background-color: var(--card-bg);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .report-type-selector select:hover {
-  border-color: #3b82f6;
+  border-color: var(--brand-primary);
 }
 
 .report-type-selector select:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: var(--brand-primary);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
@@ -109,15 +109,16 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+  transition: all 0.1s ease;
 }
 
 .stat-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transform: translateY(-2px);
 }
 
@@ -155,7 +156,7 @@
 
 .stat-details h3 {
   font-size: 0.875rem;
-  color: #64748b;
+  color: var(--text-secondary);
   font-weight: 600;
   margin-bottom: 0.25rem;
 }
@@ -163,22 +164,24 @@
 .stat-value {
   font-size: 1rem;
   font-weight: 800;
-  color: #1e293b;
+  color: var(--text-primary);
   margin: 0;
 }
 
 .stat-meta {
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: var(--text-muted);
 }
 
 /* Report Section */
 .report-section {
-  background: white;
+  background: var(--card-bg);
   border-radius: 12px;
   padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+  transition: none;
 }
 
 .section-header {
@@ -187,13 +190,13 @@
   align-items: center;
   margin-bottom: 1.5rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .section-header h2 {
   font-size: 1.5rem;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text-primary);
 }
 
 .filter-group {
@@ -205,27 +208,27 @@
 .filter-group label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #475569;
+  color: var(--text-secondary);
 }
 
 .severity-filter {
   padding: 0.5rem 1rem;
-  border: 2px solid #e2e8f0;
+  border: 2px solid var(--border-color);
   border-radius: 8px;
   font-size: 0.875rem;
-  color: #1e293b;
-  background-color: white;
+  color: var(--text-primary);
+  background-color: var(--card-bg);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .severity-filter:hover {
-  border-color: #3b82f6;
+  border-color: var(--brand-primary);
 }
 
 .severity-filter:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: var(--brand-primary);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
@@ -242,8 +245,8 @@
 .spinner {
   width: 48px;
   height: 48px;
-  border: 4px solid #e2e8f0;
-  border-top-color: #3b82f6;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--brand-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -264,28 +267,28 @@
 }
 
 .data-table thead {
-  background-color: #f8fafc;
+  background-color: var(--bg-secondary);
 }
 
 .data-table th {
   text-align: left;
   padding: 1rem;
   font-weight: 600;
-  color: #475569;
+  color: var(--text-secondary);
   text-transform: uppercase;
   font-size: 0.75rem;
   letter-spacing: 0.5px;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid var(--border-color);
 }
 
 .data-table td {
   padding: 1rem;
-  border-bottom: 1px solid #e2e8f0;
-  color: #1e293b;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
 }
 
 .data-table tbody tr:hover {
-  background-color: #f8fafc;
+  background-color: var(--hover-bg);
 }
 
 .empty-state {
@@ -427,7 +430,7 @@
   border: 2px solid #e2e8f0;
   border-radius: 12px;
   padding: 1.5rem;
-  transition: all 0.3s;
+  transition: all 0.1s;
 }
 
 .compliance-card:hover {
@@ -524,7 +527,7 @@
 .progress-fill {
   height: 100%;
   border-radius: 4px;
-  transition: width 0.3s ease;
+  transition: width 0.1s ease;
 }
 
 .progress-fill.passing {
